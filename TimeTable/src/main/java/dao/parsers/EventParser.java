@@ -37,7 +37,7 @@ public class EventParser
 	{
 		String cellData = removeModuleIdFromCell();
 		String[] result = cellData.split("/");
-		return result[1];
+		return removeExtraFromInstance(result[1]);
 	}
 	
 	private String removeModuleIdFromCell()
@@ -57,5 +57,16 @@ public class EventParser
 			return EventType.PRACTICAL;
 		else
 			return EventType.DEFAULT;
+	}
+	
+	private String removeExtraFromInstance(String info)
+	{
+		if(!info.contains(" "))
+		{
+			return info;
+		}
+		
+		String[] split = info.split(" ");
+		return split[0];
 	}
 }
