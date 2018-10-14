@@ -6,7 +6,7 @@ import toStringHelpers.SlotToString;
 public class Slot
 {
 	private int id;
-	private String day;
+	private DayOfWeek day;
 	private String startTime;
 	private String endTime;
 	private boolean isUsed;
@@ -17,7 +17,7 @@ public class Slot
 	{
 		return id;
 	}
-	public String getDay()
+	public DayOfWeek getDay()
 	{
 		return day;
 	}
@@ -42,7 +42,7 @@ public class Slot
 	{
 		this.id = id;
 	}
-	public void setDay(String day)
+	public void setDay(DayOfWeek day)
 	{
 		this.day = day;
 	}
@@ -65,9 +65,9 @@ public class Slot
 	
 	public Slot()
 	{
-		this(0, "", "", "", false);
+		this(0, DayOfWeek.DEFAULT, "", "", false);
 	}
-	public Slot(int id, String day, String startTime, String endTime, boolean isUsed)
+	public Slot(int id, DayOfWeek day, String startTime, String endTime, boolean isUsed)
 	{
 		setId(id);
 		setDay(day);

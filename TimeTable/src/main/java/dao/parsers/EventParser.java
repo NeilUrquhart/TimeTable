@@ -1,43 +1,73 @@
 package dao.parsers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.poi.ss.usermodel.Row;
 
 import entities.Event;
 import entities.EventType;
 import entities.Module;
+import entities.Room;
+import entities.Staff;
+import entities.Student;
+import entities.StudentInEvent;
 
 public class EventParser
 {
 	private Row row;
-	private Module module;
-	
-	public EventParser(Row row, Module module)
+	private ModuleParser moduleParser;
+	private RoomParser roomParser;
+	private StaffParser staffParser;
+	private StudentParser studentParser;
+
+	public EventParser(Row row, ModuleParser moduleParser, 
+			RoomParser roomParser, StaffParser staffParser, StudentParser studentParser)
 	{
 		this.row = row;
-		this.module = module;
+		this.moduleParser = moduleParser;
+		this.roomParser = roomParser;
+		this.staffParser = staffParser;
+		this.studentParser = studentParser;
 	}
 	
 	public Event createEventFromRow()
 	{
 		Event result = new Event();
-		result.setModule(module);
+		result.setModule(getModuleFromCell());
 		result.setType(getEventTypeFromCell());
 		result.setInstance(getEventInstanceFromCell());
+		result.setRoom(getRoomFromCell());
+		result.setStaff(getStaffFromCell());
+		result.setStudents(getStudentsFromCell(result));
 		return result;
+	}
+	
+	private Module getModuleFromCell()
+	{
+		return moduleParser.createModuleFromRow();
 	}
 	
 	private EventType getEventTypeFromCell()
 	{
-		String cellData = removeModuleIdFromCell();
-		String[] result = cellData.split("/");
-		return getEventTypeFromString(result[0]);
+		String result = getTypeOrInstanceFromCell(0);
+		return getEventTypeFromString(result);
 	}
 	
 	private String getEventInstanceFromCell()
 	{
+		String result = getTypeOrInstanceFromCell(1);
+		return removeExtraFromInstance(result);
+	}
+	
+	// Splits the String of the Cell on the /
+	// index of 0 is the Type, 1 is the instance
+	private String getTypeOrInstanceFromCell(int index)
+	{
 		String cellData = removeModuleIdFromCell();
 		String[] result = cellData.split("/");
-		return removeExtraFromInstance(result[1]);
+		return result[index];
 	}
 	
 	private String removeModuleIdFromCell()
@@ -68,5 +98,30 @@ public class EventParser
 		
 		String[] split = info.split(" ");
 		return split[0];
+	}
+	
+	private Room getRoomFromCell()
+	{
+		return roomParser.createRoomFromRow();
+	}
+	
+	private List<Staff> getStaffFromCell()
+	{
+		Map<String, Staff> staffMap = staffParser.createStaffFromRow();
+		return new ArrayList<Staff>(staffMap.values());
+	}
+	
+	private List<StudentInEvent> getStudentsFromCell(Event event)
+	{
+		Map<String, Student> studentMap = studentParser.createStudentsFromRow();
+		List<StudentInEvent> result = new ArrayList<StudentInEvent>();
+		for(Student s : studentMap.values())
+		{
+			StudentInEvent sie = new StudentInEvent();
+			sie.setStudent(s);
+			sie.setEvent(event);
+			result.add(sie);
+		}
+		return result;
 	}
 }
