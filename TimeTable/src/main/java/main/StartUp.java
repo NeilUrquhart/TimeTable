@@ -1,15 +1,19 @@
 package main;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbookFactory;
 
+import dao.TimetableExcelDataReader;
 import dao.parsers.EventParser;
 import dao.parsers.ModuleParser;
 import dao.parsers.RoomParser;
@@ -26,7 +30,7 @@ public class StartUp
 {
 	public static void main(String[] args)
 	{		
-		String filePath = "C:\\Users\\Neil\\Desktop\\Source Control\\TT-Data.xlsx";
+		String filePath = "TT-Data.xlsx";
 		Map<String,Module> modules = new HashMap<String,Module>();
 		Map<String, Room> rooms = new HashMap<String, Room>();
 		Map<String, Staff> staff = new HashMap<String, Staff>();
@@ -34,6 +38,9 @@ public class StartUp
 		int i = 0;
 		try
 		{
+			//File file = new File(getResource(filePath).getFile());
+			TimetableExcelDataReader dr = new TimetableExcelDataReader();
+			dr.run();
 			FileInputStream fs = new FileInputStream(filePath);
 			XSSFWorkbook wb = new XSSFWorkbook(fs);
 			XSSFSheet sheet = wb.getSheetAt(0);
@@ -110,7 +117,8 @@ public class StartUp
 		}
 		catch(IOException ioe)
 		{
-			System.out.println("OOPS");
+			System.out.println("OOPS " + ioe.getMessage());
+			// TODO Auto-generated catch block
 		}
 		for(Module m : modules.values())
 		{
