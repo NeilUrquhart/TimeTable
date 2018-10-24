@@ -8,6 +8,15 @@ public class ModuleParser
 {
 	private Row row;
 	
+	public void setRow(Row row)
+	{
+		this.row = row;
+	}
+	
+	public ModuleParser()
+	{
+		
+	}
 	public ModuleParser(Row row)
 	{
 		this.row = row;

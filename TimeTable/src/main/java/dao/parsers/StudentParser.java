@@ -11,6 +11,15 @@ public class StudentParser
 {
 	private Row row;
 	
+	public void setRow(Row row)
+	{
+		this.row = row;
+	}
+	
+	public StudentParser()
+	{
+		
+	}
 	public StudentParser(Row row)
 	{
 		this.row = row;

@@ -22,7 +22,16 @@ public class EventParser
 	private RoomParser roomParser;
 	private StaffParser staffParser;
 	private StudentParser studentParser;
+	
+	public void setRow(Row row)
+	{
+		this.row = row;
+	}
+	
+	public EventParser()
+	{
 
+	}
 	public EventParser(Row row)
 	{
 		this.row = row;

@@ -11,6 +11,15 @@ public class StaffParser
 {
 	private Row row;
 	
+	public void setRow(Row row)
+	{
+		this.row = row;
+	}
+	
+	public StaffParser()
+	{
+		
+	}
 	public StaffParser(Row row)
 	{
 		this.row = row;

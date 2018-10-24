@@ -8,6 +8,15 @@ public class RoomParser
 {
 	private Row row;
 	
+	public void setRow(Row row)
+	{
+		this.row = row;
+	}
+	
+	public RoomParser()
+	{
+		
+	}
 	public RoomParser(Row row)
 	{
 		this.row = row;
