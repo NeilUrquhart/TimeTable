@@ -10,6 +10,7 @@ import entities.Event;
 import entities.EventType;
 import entities.Module;
 import entities.Room;
+import entities.Slot;
 import entities.Staff;
 import entities.Student;
 import entities.StudentInEvent;
@@ -22,14 +23,13 @@ public class EventParser
 	private StaffParser staffParser;
 	private StudentParser studentParser;
 
-	public EventParser(Row row, ModuleParser moduleParser, 
-			RoomParser roomParser, StaffParser staffParser, StudentParser studentParser)
+	public EventParser(Row row)
 	{
 		this.row = row;
-		this.moduleParser = moduleParser;
-		this.roomParser = roomParser;
-		this.staffParser = staffParser;
-		this.studentParser = studentParser;
+		this.moduleParser = new ModuleParser(row);
+		this.roomParser = new RoomParser(row);
+		this.staffParser = new StaffParser(row);
+		this.studentParser = new StudentParser(row);
 	}
 	
 	public Event createEventFromRow()
@@ -41,6 +41,7 @@ public class EventParser
 		result.setRoom(getRoomFromCell());
 		result.setStaff(getStaffFromCell());
 		result.setStudents(getStudentsFromCell(result));
+		result.setSlots(getAllSlotsForEvent(result));
 		return result;
 	}
 	
@@ -123,5 +124,12 @@ public class EventParser
 			result.add(sie);
 		}
 		return result;
+	}
+	
+	private List<Slot> getAllSlotsForEvent(Event event)
+	{
+		SlotParser slotParser = new SlotParser(row, event);
+		Map<Integer, Slot> slotMap = slotParser.createSlotFromRow();
+		return new ArrayList<Slot>(slotMap.values());
 	}
 }

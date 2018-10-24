@@ -12,17 +12,26 @@ public class TimetableExcelDataReader
 	{
 		ClassLoader cl = getClass().getClassLoader();
 		File f = new File(cl.getResource("TT-Data.xlsx").getFile());
-		
+	}
+	
+	public void initialise(String filePath)
+	{
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(filePath);
 		try
 		{
-			FileInputStream fs = new FileInputStream(f);
-			XSSFWorkbook wb = new XSSFWorkbook(fs);
+			XSSFWorkbook wb = new XSSFWorkbook(file);
 			XSSFSheet sheet = wb.getSheetAt(0);
-			System.out.println("WOOHOO");
+			System.out.println("Works");
 		}
 		catch(Exception e)
 		{
-			System.out.println("Error: " + e.getMessage());
+			throw new RuntimeException("Oh shit!" + e.getMessage());
 		}
+	}
+	
+	public void readExcelSheet()
+	{
+		
 	}
 }

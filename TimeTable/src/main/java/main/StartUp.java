@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbookFactory;
 
+import dao.SlotExcelDataReader;
 import dao.TimetableExcelDataReader;
 import dao.parsers.EventParser;
 import dao.parsers.ModuleParser;
@@ -22,6 +23,7 @@ import dao.parsers.StudentParser;
 import entities.Event;
 import entities.Module;
 import entities.Room;
+import entities.Slot;
 import entities.Staff;
 import entities.Student;
 import entities.StudentInEvent;
@@ -30,17 +32,19 @@ public class StartUp
 {
 	public static void main(String[] args)
 	{		
-		String filePath = "TT-Data.xlsx";
+		String filePath = "C:\\Users\\Neil\\Desktop\\Source Control\\TT-Data.xlsx";
 		Map<String,Module> modules = new HashMap<String,Module>();
 		Map<String, Room> rooms = new HashMap<String, Room>();
 		Map<String, Staff> staff = new HashMap<String, Staff>();
 		Map<String, Student> students = new HashMap<String, Student>();
+		Map<Integer, Slot> slots = new HashMap<Integer, Slot>();
 		int i = 0;
 		try
 		{
-			//File file = new File(getResource(filePath).getFile());
 			TimetableExcelDataReader dr = new TimetableExcelDataReader();
-			dr.run();
+			dr.initialise(filePath);
+			SlotExcelDataReader sr = new SlotExcelDataReader();
+			slots = sr.readAll();
 			FileInputStream fs = new FileInputStream(filePath);
 			XSSFWorkbook wb = new XSSFWorkbook(fs);
 			XSSFSheet sheet = wb.getSheetAt(0);
@@ -54,7 +58,7 @@ public class StartUp
 					RoomParser rp = new RoomParser(row);
 					StaffParser stp = new StaffParser(row);
 					StudentParser sp = new StudentParser(row);
-					EventParser ep = new EventParser(row, mp, rp, stp, sp);
+					EventParser ep = new EventParser(row);
 					Module m = mp.createModuleFromRow();
 					if(!modules.containsKey(m.getName()))
 					{
@@ -135,10 +139,15 @@ public class StartUp
 //			System.out.println(s.toString());
 //			System.out.println();
 //		}
-		for(Student s : students.values())
-		{
-			System.out.println(s.toString());
-			System.out.println();
-		}
+//		for(Student s : students.values())
+//		{
+//			System.out.println(s.toString());
+//			System.out.println();
+//		}
+//		for(Slot slot : slots.values())
+//		{
+//			System.out.println(slot.toString());
+//			System.out.println();
+//		}
 	}
 }
