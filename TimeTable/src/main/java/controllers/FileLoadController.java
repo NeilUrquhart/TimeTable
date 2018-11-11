@@ -9,7 +9,7 @@ import dao.TimetableExcelDataReader;
 import entities.Module;
 import entities.Programme;
 
-public class MainController
+public class FileLoadController
 {
 	private TimetableData timetableData;
 	
@@ -18,7 +18,7 @@ public class MainController
 		return timetableData;
 	}
 	
-	public MainController()
+	public FileLoadController()
 	{
 		timetableData = new TimetableData();
 	}

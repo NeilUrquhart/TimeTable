@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Map;
 
-import controllers.MainController;
+import controllers.FileLoadController;
 import dao.DataReaderSetting;
 import dao.ProgrammeCsvReader;
 import dao.TimetableData;
@@ -23,7 +23,7 @@ public class StartUp
 	public static void main(String[] args)
 	{		
 		String filePath = "C:\\Users\\Neil\\Desktop\\Source Control\\TT-Data.xlsx";
-		MainController controller = new MainController();
+		FileLoadController controller = new FileLoadController();
 		controller.readTimetableData(filePath);
 		
 		for(Programme p : controller.getTimetableData().getProgrammes().values())
