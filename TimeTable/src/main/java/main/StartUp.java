@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Map;
 
+import controllers.MainController;
 import dao.DataReaderSetting;
 import dao.ProgrammeCsvReader;
 import dao.TimetableData;
@@ -22,25 +23,12 @@ public class StartUp
 	public static void main(String[] args)
 	{		
 		String filePath = "C:\\Users\\Neil\\Desktop\\Source Control\\TT-Data.xlsx";
-		TimetableExcelDataReader dataReader = new TimetableExcelDataReader(DataReaderSetting.TESTING);
-		TimetableData data = dataReader.getData(filePath);
-		ProgrammeCsvReader programmeReader = new ProgrammeCsvReader();
-		Map<String, Programme> programmes = programmeReader.read();
-		for(Programme p : programmes.values())
-		{
-			for(Module m : data.getModules().values())
-			{
-				for(Module otherM : p.getModules())
-				{
-					if(m.getName().contains(otherM.getName()))
-					{
-						otherM.setDescription(m.getDescription());
-						otherM.setEvents(m.getEvents());
-					}
-				}
-			}
-		}
+		MainController controller = new MainController();
+		controller.readTimetableData(filePath);
 		
-		data.setProgrammes(programmes);
+		for(Programme p : controller.getTimetableData().getProgrammes().values())
+		{
+			System.out.println(p);
+		}
 	}
 }
