@@ -36,11 +36,11 @@ public class ModuleParser
 		
 		// The Regex recognises the \\\\ as spliting on a singluar \
 		String[] results = cellData.split("\\\\"); 
-		return results[0];
+		return results[0].trim();
 	}
 	
 	private String getModuleDescriptionFromCell()
 	{
-		return row.getCell(1).toString();
+		return row.getCell(1).toString().trim();
 	}
 }

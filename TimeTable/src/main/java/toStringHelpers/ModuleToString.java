@@ -1,5 +1,7 @@
 package toStringHelpers;
 
+import java.util.List;
+
 import entities.Module;
 
 public class ModuleToString implements ObjectToString
@@ -31,5 +33,14 @@ public class ModuleToString implements ObjectToString
 		}
 		return result;
 	}
-
+	
+	public static String getModuleAsString(List<Module> modules)
+	{
+		String result = "";
+		for(Module m : modules)
+		{
+			result += m.toString() + "\n\n";
+		}
+		return result;
+	}
 }

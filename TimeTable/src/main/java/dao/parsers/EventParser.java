@@ -61,13 +61,13 @@ public class EventParser
 	
 	private EventType getEventTypeFromCell()
 	{
-		String result = getTypeOrInstanceFromCell(0);
+		String result = getTypeOrInstanceFromCell(0).trim();
 		return getEventTypeFromString(result);
 	}
 	
 	private String getEventInstanceFromCell()
 	{
-		String result = getTypeOrInstanceFromCell(1);
+		String result = getTypeOrInstanceFromCell(1).trim();
 		return removeExtraFromInstance(result);
 	}
 	
@@ -77,14 +77,14 @@ public class EventParser
 	{
 		String cellData = removeModuleIdFromCell();
 		String[] result = cellData.split("/");
-		return result[index];
+		return result[index].trim();
 	}
 	
 	private String removeModuleIdFromCell()
 	{
 		String cellData = row.getCell(0).toString();
 		String[] result = cellData.split("\\\\");
-		return result[1];
+		return result[1].trim();
 	}
 	
 	private EventType getEventTypeFromString(String type)

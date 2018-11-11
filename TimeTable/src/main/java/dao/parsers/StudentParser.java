@@ -45,7 +45,8 @@ public class StudentParser
 		{
 			if(!studentArray[i].trim().isEmpty())
 			{
-				Student student = new Student(studentArray[i]);
+				int matricAsInt = (int)Math.round(Double.parseDouble(studentArray[i]));
+				Student student = new Student(Integer.toString(matricAsInt).trim());
 				result.put(student.getMatric(), student);
 			}
 		}

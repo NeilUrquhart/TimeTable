@@ -5,6 +5,7 @@ import java.util.Map;
 
 import entities.Event;
 import entities.Module;
+import entities.Programme;
 import entities.Room;
 import entities.Slot;
 import entities.Staff;
@@ -18,6 +19,7 @@ public class TimetableData
 	private Map<String, Student> students;
 	private Map<String, Staff> staff;
 	private Map<Integer, Slot> slots;
+	private Map<String, Programme> programmes;
 	
 	public Map<String, Module> getModules()
 	{
@@ -42,6 +44,10 @@ public class TimetableData
 	public Map<Integer, Slot> getSlots()
 	{
 		return slots;
+	}
+	public Map<String, Programme> getProgrammes()
+	{
+		return programmes;
 	}
 	
 	public void setModules(Map<String, Module> modules)
@@ -68,6 +74,10 @@ public class TimetableData
 	{
 		this.slots = slots;
 	}
+	public void setProgrammes(Map<String, Programme> programmes)
+	{
+		this.programmes = programmes;
+	}
 	
 	public TimetableData()
 	{
@@ -85,5 +95,6 @@ public class TimetableData
 		this.students = students;
 		this.staff = staff;
 		this.slots = slots;
+		programmes = new HashMap<String, Programme>();
 	}
 }

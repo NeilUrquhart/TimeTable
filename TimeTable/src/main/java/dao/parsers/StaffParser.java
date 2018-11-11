@@ -44,7 +44,7 @@ public class StaffParser
 		{
 			if(!staffArray[i].trim().isEmpty())
 			{
-				Staff staff = new Staff(staffArray[i]);
+				Staff staff = new Staff(staffArray[i].trim());
 				result.put(staff.getName(), staff);
 			}
 		}
