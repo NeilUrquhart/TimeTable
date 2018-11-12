@@ -17,6 +17,7 @@ import dao.parsers.StudentParser;
 import entities.Event;
 import entities.Module;
 import entities.Room;
+import entities.Slot;
 import entities.Staff;
 import entities.Student;
 import entities.StudentInEvent;

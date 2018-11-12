@@ -51,6 +51,7 @@ public class FileLoadController
 				{
 					if(m.getName().contains(otherM.getName()))
 					{
+						otherM.setName(m.getName());
 						otherM.setDescription(m.getDescription());
 						otherM.setEvents(m.getEvents());
 					}

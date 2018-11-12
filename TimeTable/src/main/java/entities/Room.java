@@ -11,6 +11,7 @@ public class Room
 	private String name;
 	private int capacity;
 	private List<Event> events;
+	private List<Slot> slots;
 	private ObjectToString roomToString;
 	
 	public String getName()
@@ -25,6 +26,10 @@ public class Room
 	{
 		return events;
 	}
+	public List<Slot> getSlots()
+	{
+		return slots;
+	}
 	
 	public void setName(String name)
 	{
@@ -38,6 +43,10 @@ public class Room
 	{
 		this.events = events;
 	}
+	public void setSlots(List<Slot> slots)
+	{
+		this.slots = slots;
+	}
 	
 	public Room()
 	{
@@ -48,6 +57,7 @@ public class Room
 		setName(name);
 		setCapacity(capacity);
 		setEvents(new ArrayList<Event>());
+		setSlots(new ArrayList<Slot>());
 		roomToString = new RoomToString(this);
 	}
 	
