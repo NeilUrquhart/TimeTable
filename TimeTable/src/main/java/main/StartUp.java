@@ -24,9 +24,9 @@ public class StartUp
 {
 	public static void main(String[] args)
 	{		
-		String filePath = "C:\\Users\\Neil\\Desktop\\Source Control\\TT-Data.xlsx";
-		FileLoadController controller = new FileLoadController();
-		controller.readTimetableData(filePath);
+		String filePath = "H:\\Neil Urquhart\\TT-Data.xlsx";
+		FileLoadController controller = FileLoadController.getInstance(filePath);
+		controller.readTimetableData();
 		QueryController queryCont = new QueryController(controller.getTimetableData());
 		Programme p = queryCont.getProgrammeByName("bsccomputing");
 		Module m = queryCont.getModuleByName("csn07101");

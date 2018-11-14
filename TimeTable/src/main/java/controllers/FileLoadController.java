@@ -12,26 +12,35 @@ import entities.Programme;
 public class FileLoadController
 {
 	private TimetableData timetableData;
+	private static FileLoadController fileLoadControllerInstance = null;
+	private String filePath;
 	
 	public TimetableData getTimetableData()
 	{
 		return timetableData;
 	}
 	
-	public FileLoadController()
+	private FileLoadController(String filePath)
 	{
 		timetableData = new TimetableData();
+		this.filePath = filePath;
 	}
 	
-	public void readTimetableData(String filePath)
+	public static FileLoadController getInstance(String filePath)
 	{
-		if(filePath.equals(""))
+		if(fileLoadControllerInstance == null)
+			fileLoadControllerInstance = new FileLoadController(filePath);
+		return fileLoadControllerInstance;
+	}
+	
+	public void readTimetableData()
+	{
+		if(this.filePath.equals(""))
 		{
 			throw new RuntimeException("\nFile Path not supplied"
 					+ "\nClass: " + getClass().getSimpleName() 
 					+ "\nMethod: readTimetableData");
 		}
-		
 		TimetableExcelDataReader dataReader = new TimetableExcelDataReader(DataReaderSetting.LIVE);
 		timetableData = dataReader.getData(filePath);
 		if(timetableData == null)

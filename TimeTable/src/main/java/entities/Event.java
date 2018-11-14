@@ -106,4 +106,72 @@ public class Event
 	{
 		return eventToString.stringify();
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((instance == null) ? 0 : instance.hashCode());
+		result = prime * result + ((module == null) ? 0 : module.hashCode());
+		result = prime * result + ((room == null) ? 0 : room.hashCode());
+		result = prime * result + ((slots == null) ? 0 : slots.hashCode());
+		result = prime * result + ((staff == null) ? 0 : staff.hashCode());
+		result = prime * result + ((students == null) ? 0 : students.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Event other = (Event) obj;
+		if (id != other.id)
+			return false;
+		if (instance == null)
+		{
+			if (other.instance != null)
+				return false;
+		} else if (!instance.equals(other.instance))
+			return false;
+		if (module == null)
+		{
+			if (other.module != null)
+				return false;
+		} else if (!module.equals(other.module))
+			return false;
+		if (room == null)
+		{
+			if (other.room != null)
+				return false;
+		} else if (!room.equals(other.room))
+			return false;
+		if (slots == null)
+		{
+			if (other.slots != null)
+				return false;
+		} else if (!slots.equals(other.slots))
+			return false;
+		if (staff == null)
+		{
+			if (other.staff != null)
+				return false;
+		} else if (!staff.equals(other.staff))
+			return false;
+		if (students == null)
+		{
+			if (other.students != null)
+				return false;
+		} else if (!students.equals(other.students))
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
 }

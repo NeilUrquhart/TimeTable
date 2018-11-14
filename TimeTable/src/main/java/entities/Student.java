@@ -46,4 +46,38 @@ public class Student
 	{
 		return studentToString.stringify();
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((events == null) ? 0 : events.hashCode());
+		result = prime * result + ((matric == null) ? 0 : matric.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Student other = (Student) obj;
+		if (events == null)
+		{
+			if (other.events != null)
+				return false;
+		} else if (!events.equals(other.events))
+			return false;
+		if (matric == null)
+		{
+			if (other.matric != null)
+				return false;
+		} else if (!matric.equals(other.matric))
+			return false;
+		return true;
+	}
 }
