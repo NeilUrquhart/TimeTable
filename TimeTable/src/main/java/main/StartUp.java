@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import controllers.FileLoadController;
+import controllers.MoveController;
 import controllers.QueryController;
 import dao.DataReaderSetting;
 import dao.ProgrammeCsvReader;
@@ -29,14 +30,18 @@ public class StartUp
 		FileLoadController controller = FileLoadController.getInstance(filePath);
 		controller.readTimetableData();
 		QueryController queryCont = new QueryController(controller.getTimetableData());
+		MoveController moveController = new MoveController(controller.getTimetableData());
 		Programme p = queryCont.getProgrammeByName("bsccomputing");
 		Module m = queryCont.getModuleByName("csn07101");
 		Room r = queryCont.getRoomByName("mer_a17");
 		Staff s = queryCont.getStaffByName("sybill");
 		
-		Map<Integer, Slot> slots = new TreeMap<Integer, Slot>(controller.getTimetableData().getSlots());
-		for(Integer key : slots.keySet()) {
-			System.out.println(key + "\n");
+		Event e = controller.getTimetableData().getEvents().get(1);
+		Slot slot = controller.getTimetableData().getSlots().get(2);
+		
+		if(moveController.canEventMoveToSlot(e, slot) == false)
+		{
+			System.out.println("WOOHO");
 		}
 	}
 }
