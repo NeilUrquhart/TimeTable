@@ -28,7 +28,14 @@ public class MoveController
 			}
 		}
 		
+		if(room.getSlots().contains(moveTo))
+			return false;
 		
+		int slotCountOfEvent = event.getSlots().size();
+		
+		if(slotCountOfEvent > 1) {
+			
+		}
 		
 		return true;
 	}
