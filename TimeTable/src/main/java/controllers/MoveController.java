@@ -35,7 +35,7 @@ public class MoveController
 		return true;
 	}
 	
-	public boolean canEventMoveToSlot(Event event, Slot moveTo) 
+	private boolean canEventMoveToSlot(Event event, Slot moveTo) 
 	{
 		Room room = getRoomForEvent(event);
 		if(isRoomInUse(room, moveTo))
@@ -52,9 +52,9 @@ public class MoveController
 			
 			if(!areAllSlotsFreeForRoom(room, slots))
 				return false;
+			return true;
 		}
-		
-		return true;
+		return false;
 	}
 	
 	private Room getRoomForEvent(Event event)
