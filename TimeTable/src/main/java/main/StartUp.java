@@ -38,10 +38,5 @@ public class StartUp
 		
 		Event e = controller.getTimetableData().getEvents().get(1);
 		Slot slot = controller.getTimetableData().getSlots().get(2);
-		
-		if(moveController.canEventMoveToSlot(e, slot) == false)
-		{
-			System.out.println("WOOHO");
-		}
 	}
 }
