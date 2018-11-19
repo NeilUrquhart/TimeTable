@@ -4,6 +4,7 @@ import dao.TimetableData;
 import entities.Module;
 import entities.Programme;
 import entities.Room;
+import entities.Slot;
 import entities.Staff;
 
 public class QueryController
@@ -70,6 +71,20 @@ public class QueryController
 			if(staff.getName().toUpperCase().equals(name.toUpperCase()))
 			{
 				result = staff;
+				break;
+			}
+		}
+		return result;
+	}
+	
+	public Slot getSlotById(int id)
+	{
+		Slot result = null;
+		for(Slot slot : data.getSlots().values())
+		{
+			if(slot.getId() == id)
+			{
+				result = slot;
 				break;
 			}
 		}
