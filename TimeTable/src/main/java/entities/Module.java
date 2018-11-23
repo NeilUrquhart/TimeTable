@@ -3,24 +3,31 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import jade.content.Concept;
+import jade.content.onto.annotations.AggregateSlot;
+import jade.content.onto.annotations.Slot;
 import toStringHelpers.ModuleToString;
 import toStringHelpers.ObjectToString;
 
-public class Module
+public class Module implements Concept
 {
 	private String name;
 	private String description;
 	private List<Event> events;
 	private ObjectToString moduleToString;
 	
+	@Slot (mandatory = true)
 	public String getName()
 	{
 		return name;
 	}
+	
 	public String getDescription()
 	{
 		return description;
 	}
+	
+	@AggregateSlot(cardMin = 1)//Must have at least one event
 	public List<Event> getEvents()
 	{
 		return events;

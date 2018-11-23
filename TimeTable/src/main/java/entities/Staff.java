@@ -3,19 +3,23 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.StaffToString;
+import jade.content.onto.annotations.Slot;
 
-public class Staff
+public class Staff implements Concept
 {
 	private String name;
 	private List<Event> events;
 	private ObjectToString staffToString;
 	
+	@Slot(mandatory = true)
 	public String getName()
 	{
 		return name;
 	}
+	
 	public List<Event> getEvents()
 	{
 		return events;

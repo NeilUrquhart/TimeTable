@@ -3,10 +3,12 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.RoomToString;
+import jade.content.onto.annotations.Slot;
 
-public class Room
+public class Room implements Concept
 {
 	private String name;
 	private int capacity;
@@ -14,10 +16,13 @@ public class Room
 	private List<Slot> slots;
 	private ObjectToString roomToString;
 	
+	@Slot (mandatory = true)
 	public String getName()
 	{
 		return name;
 	}
+	
+	@Slot (mandatory = true)
 	public int getCapacity()
 	{
 		return capacity;

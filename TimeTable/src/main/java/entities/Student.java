@@ -3,19 +3,23 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.StudentToString;
+import jade.content.onto.annotations.Slot;
 
-public class Student
+public class Student implements Concept
 {
 	private String matric;
 	private List<StudentInEvent> events;
 	private ObjectToString studentToString;
 	
+	@Slot(mandatory = true)
 	public String getMatric()
 	{
 		return matric;
 	}
+	
 	public List<StudentInEvent> getEvents()
 	{
 		return events;
