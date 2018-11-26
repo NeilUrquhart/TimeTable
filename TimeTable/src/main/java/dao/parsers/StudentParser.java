@@ -45,9 +45,16 @@ public class StudentParser
 		{
 			if(!studentArray[i].trim().isEmpty())
 			{
-				int matricAsInt = (int)Math.round(Double.parseDouble(studentArray[i]));
-				Student student = new Student(Integer.toString(matricAsInt).trim());
-				result.put(student.getMatric(), student);
+				try
+				{
+					int matricAsInt = (int)Math.round(Double.parseDouble(studentArray[i]));
+					Student student = new Student(Integer.toString(matricAsInt).trim());
+					result.put(student.getMatric(), student);
+				}
+				catch(Exception ex)
+				{
+					// This is to catch when a student group is in the field and not just the matric num
+				}
 			}
 		}
 		return result;
