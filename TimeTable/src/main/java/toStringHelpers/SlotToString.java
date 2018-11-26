@@ -1,12 +1,12 @@
 package toStringHelpers;
 
-import entities.Slot;
+import entities.TTSlot;
 
 public class SlotToString implements ObjectToString
 {
-	private Slot slot;
+	private TTSlot slot;
 	
-	public SlotToString(Slot slot)
+	public SlotToString(TTSlot slot)
 	{
 		this.slot = slot;
 	}

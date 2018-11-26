@@ -7,7 +7,7 @@ import entities.Event;
 import entities.Module;
 import entities.Programme;
 import entities.Room;
-import entities.Slot;
+import entities.TTSlot;
 import entities.Staff;
 import entities.Student;
 
@@ -18,7 +18,7 @@ public class TimetableData
 	private Map<String, Room> rooms;
 	private Map<String, Student> students;
 	private Map<String, Staff> staff;
-	private Map<Integer, Slot> slots;
+	private Map<Integer, TTSlot> slots;
 	private Map<String, Programme> programmes;
 	
 	public Map<String, Module> getModules()
@@ -41,7 +41,7 @@ public class TimetableData
 	{
 		return staff;
 	}
-	public Map<Integer, Slot> getSlots()
+	public Map<Integer, TTSlot> getSlots()
 	{
 		return slots;
 	}
@@ -70,7 +70,7 @@ public class TimetableData
 	{
 		this.staff = staff;
 	}
-	public void setSlots(Map<Integer, Slot> slots)
+	public void setSlots(Map<Integer, TTSlot> slots)
 	{
 		this.slots = slots;
 	}
@@ -83,11 +83,11 @@ public class TimetableData
 	{
 		this(new HashMap<String, Module>(), new HashMap<Integer, Event>(), 
 				new HashMap<String, Room>(), new HashMap<String, Student>(), 
-				new HashMap<String, Staff>(), new HashMap<Integer, Slot>());
+				new HashMap<String, Staff>(), new HashMap<Integer, TTSlot>());
 	}
 	public TimetableData(Map<String, Module> modules, Map<Integer, Event> events, 
 			Map<String, Room> rooms, Map<String, Student> students, Map<String, Staff> staff, 
-			Map<Integer, Slot> slots)
+			Map<Integer, TTSlot> slots)
 	{
 		this.modules = modules;
 		this.events = events;

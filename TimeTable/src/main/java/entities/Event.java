@@ -15,7 +15,7 @@ public class Event
 	private Room room;
 	private List<Staff> staff;
 	private List<StudentInEvent> students;
-	private List<Slot> slots;
+	private List<TTSlot> slots;
 	private ObjectToString eventToString;
 	
 	public int getId()
@@ -46,7 +46,7 @@ public class Event
 	{
 		return students;
 	}
-	public List<Slot> getSlots()
+	public List<TTSlot> getSlots()
 	{
 		return slots;
 	}
@@ -79,7 +79,7 @@ public class Event
 	{
 		this.students = students;
 	}
-	public void setSlots(List<Slot> slots)
+	public void setSlots(List<TTSlot> slots)
 	{
 		this.slots = slots;
 	}
@@ -97,7 +97,7 @@ public class Event
 		setRoom(new Room());
 		setStaff(new ArrayList<Staff>());
 		setStudents(new ArrayList<StudentInEvent>());
-		setSlots(new ArrayList<Slot>());
+		setSlots(new ArrayList<TTSlot>());
 		eventToString = new EventToString(this);
 	}
 	

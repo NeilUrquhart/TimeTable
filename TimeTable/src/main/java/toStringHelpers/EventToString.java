@@ -4,7 +4,7 @@ import java.util.List;
 
 import entities.Event;
 import entities.Room;
-import entities.Slot;
+import entities.TTSlot;
 import entities.StudentInEvent;
 
 public class EventToString implements ObjectToString
@@ -61,7 +61,7 @@ public class EventToString implements ObjectToString
 	private String getSlotsAsString()
 	{
 		String result = "";
-		for(Slot s : event.getSlots())
+		for(TTSlot s : event.getSlots())
 		{
 			result += s.toString();
 		}

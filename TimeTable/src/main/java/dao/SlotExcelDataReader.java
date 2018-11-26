@@ -14,7 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import dao.parsers.DayOfWeekParser;
 import dao.parsers.TimeParser;
 import entities.DayOfWeek;
-import entities.Slot;
+import entities.TTSlot;
 
 public class SlotExcelDataReader
 {
@@ -25,7 +25,7 @@ public class SlotExcelDataReader
 		
 	}
 	
-	public Map<Integer, Slot> readAll()
+	public Map<Integer, TTSlot> readAll()
 	{
 		XSSFWorkbook workbook = openWorkbook(getFile());
 		if(workbook == null)
@@ -93,14 +93,14 @@ public class SlotExcelDataReader
 		return workbook.getSheetAt(0);
 	}
 	
-	private Map<Integer, Slot> getAll(XSSFSheet sheet)
+	private Map<Integer, TTSlot> getAll(XSSFSheet sheet)
 	{
-		Map<Integer, Slot> result = new HashMap<Integer, Slot>();
+		Map<Integer, TTSlot> result = new HashMap<Integer, TTSlot>();
 		Iterator<Row> rowIt = sheet.iterator();
 		while(rowIt.hasNext())
 		{
 			Row row = rowIt.next();
-			Slot slot = new Slot();
+			TTSlot slot = new TTSlot();
 			slot.setId(getId(row.getCell(0).toString()));
 			slot.setDay(getDayOfWeek(row.getCell(1).toString()));
 			slot.setStartTime(getTime(row.getCell(2)));

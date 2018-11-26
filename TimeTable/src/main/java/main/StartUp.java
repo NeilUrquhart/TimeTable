@@ -17,7 +17,7 @@ import entities.Event;
 import entities.Module;
 import entities.Programme;
 import entities.Room;
-import entities.Slot;
+import entities.TTSlot;
 import entities.Staff;
 import entities.Student;
 
@@ -26,7 +26,7 @@ public class StartUp
 {
 	public static void main(String[] args)
 	{		
-		String filePath = "H:\\Neil Urquhart\\TT-Data.xlsx";
+		String filePath = "H:\\docs\\TimeTables\\TT-Data.xlsx";
 		FileLoadController controller = FileLoadController.getInstance(filePath);
 		controller.readTimetableData();
 		QueryController queryCont = new QueryController(controller.getTimetableData());
@@ -37,6 +37,8 @@ public class StartUp
 		Staff s = queryCont.getStaffByName("sybill");
 		
 		Event e = controller.getTimetableData().getEvents().get(1);
-		Slot slot = controller.getTimetableData().getSlots().get(2);
+		TTSlot slot = controller.getTimetableData().getSlots().get(2);
+		
+		System.out.println(s);
 	}
 }

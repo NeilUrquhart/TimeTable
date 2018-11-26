@@ -10,7 +10,7 @@ import entities.Event;
 import entities.EventType;
 import entities.Module;
 import entities.Room;
-import entities.Slot;
+import entities.TTSlot;
 import entities.Staff;
 import entities.Student;
 import entities.StudentInEvent;
@@ -135,10 +135,10 @@ public class EventParser
 		return result;
 	}
 	
-	private List<Slot> getAllSlotsForEvent(Event event)
+	private List<TTSlot> getAllSlotsForEvent(Event event)
 	{
 		SlotParser slotParser = new SlotParser(row, event);
-		Map<Integer, Slot> slotMap = slotParser.createSlotFromRow();
-		return new ArrayList<Slot>(slotMap.values());
+		Map<Integer, TTSlot> slotMap = slotParser.createSlotFromRow();
+		return new ArrayList<TTSlot>(slotMap.values());
 	}
 }

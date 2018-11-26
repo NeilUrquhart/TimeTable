@@ -10,12 +10,12 @@ import org.apache.poi.ss.usermodel.Row;
 import dao.SlotExcelDataReader;
 import entities.DayOfWeek;
 import entities.Event;
-import entities.Slot;
+import entities.TTSlot;
 
 public class SlotParser
 {
 	private Row row;
-	private Map<Integer, Slot> slots;
+	private Map<Integer, TTSlot> slots;
 	private Event event;
 	
 	public SlotParser(Row row, Event event)
@@ -25,12 +25,12 @@ public class SlotParser
 		this.event = event;
 	}
 	
-	public Map<Integer, Slot> createSlotFromRow()
+	public Map<Integer, TTSlot> createSlotFromRow()
 	{
-		Map<Integer, Slot> result = new HashMap<Integer, Slot>();
+		Map<Integer, TTSlot> result = new HashMap<Integer, TTSlot>();
 		DayOfWeek day = parseDayOfTheWeek(row.getCell(4).toString());
-		Slot start = getStartSlot(day, row.getCell(5));
-		Slot end = getEndSlot(day, row.getCell(6));
+		TTSlot start = getStartSlot(day, row.getCell(5));
+		TTSlot end = getEndSlot(day, row.getCell(6));
 		result.put(start.getId(), start);
 		if(!result.containsKey(end.getId()))
 		{
@@ -41,7 +41,7 @@ public class SlotParser
 		return result;
 	}
 	
-	private Map<Integer, Slot> getSlotsFromExcel()
+	private Map<Integer, TTSlot> getSlotsFromExcel()
 	{
 		SlotExcelDataReader dataReader = new SlotExcelDataReader();
 		return dataReader.readAll();
@@ -53,12 +53,12 @@ public class SlotParser
 		return parser.getDayOfTheWeek(day);
 	}
 	
-	private Slot getStartSlot(DayOfWeek day, Cell cellData)
+	private TTSlot getStartSlot(DayOfWeek day, Cell cellData)
 	{
-		Slot result = new Slot();
+		TTSlot result = new TTSlot();
 		result.setDay(DayOfWeek.DEFAULT);
 		String startTime = getTimeAsStringFromCell(cellData);
-		for(Slot slot : slots.values())
+		for(TTSlot slot : slots.values())
 		{
 			if(isDayTheSame(slot.getDay(), day))
 			{
@@ -71,12 +71,12 @@ public class SlotParser
 		return result;
 	}
 	
-	private Slot getEndSlot(DayOfWeek day, Cell cellData)
+	private TTSlot getEndSlot(DayOfWeek day, Cell cellData)
 	{
-		Slot result = new Slot();
+		TTSlot result = new TTSlot();
 		result.setDay(DayOfWeek.DEFAULT);
 		String endTime = getTimeAsStringFromCell(cellData);
-		for(Slot slot : slots.values())
+		for(TTSlot slot : slots.values())
 		{
 			if(isDayTheSame(slot.getDay(), day))
 			{
@@ -105,17 +105,17 @@ public class SlotParser
 		return time.contains(timeToCompare);
 	}
 	
-	private Map<Integer, Slot> getAllSlotsInBetween(Map<Integer, Slot> input)
+	private Map<Integer, TTSlot> getAllSlotsInBetween(Map<Integer, TTSlot> input)
 	{
 		if(input.size() <= 2)
 		{
 			return input;
 		}
 		
-		TreeMap<Integer, Slot> result = new TreeMap<Integer, Slot>(slots);
+		TreeMap<Integer, TTSlot> result = new TreeMap<Integer, TTSlot>(slots);
 		for(int i = result.firstKey(); i <= result.lastKey(); i++)
 		{
-			Slot slot = this.slots.get(i);
+			TTSlot slot = this.slots.get(i);
 			if(!result.containsKey(slot.getId()))
 			{
 				result.put(slot.getId(), slot);
@@ -124,9 +124,9 @@ public class SlotParser
 		return result;
 	}
 	
-	private Map<Integer, Slot> addEventToSlots(Map<Integer, Slot> input)
+	private Map<Integer, TTSlot> addEventToSlots(Map<Integer, TTSlot> input)
 	{
-		for(Slot slot : input.values())
+		for(TTSlot slot : input.values())
 		{
 			slot.setEvent(event);
 			if(slot.getDay() != DayOfWeek.DEFAULT)

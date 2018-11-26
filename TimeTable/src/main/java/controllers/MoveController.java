@@ -5,7 +5,7 @@ import java.util.List;
 import dao.TimetableData;
 import entities.Event;
 import entities.Room;
-import entities.Slot;
+import entities.TTSlot;
 
 public class MoveController
 {
@@ -23,19 +23,19 @@ public class MoveController
 		query = new QueryController(data);
 	}
 	
-	public boolean moveEventToNewSlots(Event event, Slot moveTo)
+	public boolean moveEventToNewSlots(Event event, TTSlot moveTo)
 	{
 		if(!canEventMoveToSlot(event, moveTo))
 			return false;
 		
-		List<Slot> slots = getAllSlotsForMove(moveTo.getId(), event.getSlots().size());
+		List<TTSlot> slots = getAllSlotsForMove(moveTo.getId(), event.getSlots().size());
 		event.getSlots().clear();
 		event.setSlots(slots);
 		updateDataWithNewEvent(event);
 		return true;
 	}
 	
-	private boolean canEventMoveToSlot(Event event, Slot moveTo) 
+	private boolean canEventMoveToSlot(Event event, TTSlot moveTo) 
 	{
 		Room room = getRoomForEvent(event);
 		if(isRoomInUse(room, moveTo))
@@ -48,7 +48,7 @@ public class MoveController
 		
 		if((moveTo.getId() + numOfSlots) - 1 <= 45)
 		{
-			List<Slot> slots = getAllSlotsForMove(moveTo.getId(), numOfSlots);
+			List<TTSlot> slots = getAllSlotsForMove(moveTo.getId(), numOfSlots);
 			
 			if(!areAllSlotsFreeForRoom(room, slots))
 				return false;
@@ -62,11 +62,11 @@ public class MoveController
 		return query.getRoomByName(event.getRoom().getName());
 	}
 	
-	private boolean isRoomInUse(Room room, Slot slot)
+	private boolean isRoomInUse(Room room, TTSlot slot)
 	{
 		for(Event eventInRoom : room.getEvents())
 		{
-			for(Slot slotInEvent : eventInRoom.getSlots())
+			for(TTSlot slotInEvent : eventInRoom.getSlots())
 			{
 				if(slotInEvent.getId() == slot.getId())
 					return true;
@@ -75,9 +75,9 @@ public class MoveController
 		return false;
 	}
 	
-	private List<Slot> getAllSlotsForMove(int startSlotId, int numOfSlots)
+	private List<TTSlot> getAllSlotsForMove(int startSlotId, int numOfSlots)
 	{
-		List<Slot> result = new ArrayList<Slot>();
+		List<TTSlot> result = new ArrayList<TTSlot>();
 		for(int i = startSlotId; i < startSlotId + numOfSlots; i++)
 		{
 			result.add(query.getSlotById(i));
@@ -85,13 +85,13 @@ public class MoveController
 		return result;
 	}
 	
-	private boolean areAllSlotsFreeForRoom(Room room, List<Slot> slots)
+	private boolean areAllSlotsFreeForRoom(Room room, List<TTSlot> slots)
 	{
 		for(Event eventInRoom : room.getEvents())
 		{
-			for(Slot slotInEvent : eventInRoom.getSlots())
+			for(TTSlot slotInEvent : eventInRoom.getSlots())
 			{
-				for(Slot slot : slots)
+				for(TTSlot slot : slots)
 				{
 					if(slotInEvent.getId() == slot.getId())
 						return false;
