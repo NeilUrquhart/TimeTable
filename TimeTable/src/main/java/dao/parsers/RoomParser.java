@@ -33,11 +33,12 @@ public class RoomParser
 	public RoomParser(Row row)
 	{
 		this.row = row;
+		initialise();
 	}
 	
 	public Room createRoomFromRow()
 	{
-		initialise();
+		//initialise();
 		Room result = new Room();
 		result.setName(getRoomNameFromCell().trim());
 		for(Room room : rooms)

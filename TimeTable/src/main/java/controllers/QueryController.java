@@ -1,6 +1,11 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dao.TimetableData;
+import entities.Event;
+import entities.EventType;
 import entities.Module;
 import entities.Programme;
 import entities.Room;
@@ -86,6 +91,32 @@ public class QueryController
 			{
 				result = slot;
 				break;
+			}
+		}
+		return result;
+	}
+	
+	public Event getEventById(int id)
+	{
+		Event result = null;
+		for(Event event : data.getEvents().values())
+		{
+			if(event.getId() == id)
+			{
+				result = event;
+			}
+		}
+		return result;
+	}
+	
+	public List<Event> getEventByType(EventType type)
+	{
+		List<Event> result = new ArrayList<Event>();
+		for(Event event : data.getEvents().values())
+		{
+			if(event.getType() == type)
+			{
+				result.add(event);
 			}
 		}
 		return result;

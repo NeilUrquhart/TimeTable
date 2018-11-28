@@ -14,6 +14,7 @@ import dao.ProgrammeCsvReader;
 import dao.TimetableData;
 import dao.TimetableExcelDataReader;
 import entities.Event;
+import entities.EventType;
 import entities.Module;
 import entities.Programme;
 import entities.Room;
@@ -26,7 +27,7 @@ public class StartUp
 {
 	public static void main(String[] args)
 	{		
-		String filePath = "H:\\docs\\TimeTables\\TT-Data.xlsx";
+		String filePath = "H:\\Neil Urquhart\\TT-Data.xlsx";
 		FileLoadController controller = FileLoadController.getInstance(filePath);
 		controller.readTimetableData();
 		QueryController queryCont = new QueryController(controller.getTimetableData());
@@ -35,10 +36,13 @@ public class StartUp
 		Module m = queryCont.getModuleByName("csn07101");
 		Room r = queryCont.getRoomByName("mer_a17");
 		Staff s = queryCont.getStaffByName("sybill");
+		Event e = queryCont.getEventById(1);
+		List<Event> events = queryCont.getEventByType(EventType.LECTURE);
 		
-		Event e = controller.getTimetableData().getEvents().get(1);
-		TTSlot slot = controller.getTimetableData().getSlots().get(2);
-		
-		System.out.println(s);
+		for(Event event : events)
+		{
+			System.out.println(event);
+			System.out.println();
+		}
 	}
 }
