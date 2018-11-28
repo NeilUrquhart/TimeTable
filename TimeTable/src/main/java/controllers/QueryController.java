@@ -11,6 +11,7 @@ import entities.Programme;
 import entities.Room;
 import entities.TTSlot;
 import entities.Staff;
+import entities.Student;
 
 public class QueryController
 {
@@ -91,6 +92,19 @@ public class QueryController
 			{
 				result = slot;
 				break;
+			}
+		}
+		return result;
+	}
+	
+	public Student getStudentByMatric(String matric)
+	{
+		Student result = null;
+		for(Student student : data.getStudents().values())
+		{
+			if(student.getMatric().toUpperCase().equals(matric.toUpperCase()))
+			{
+				result = student;
 			}
 		}
 		return result;

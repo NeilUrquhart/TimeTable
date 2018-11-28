@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import controllers.FacadeController;
 import controllers.FileLoadController;
 import controllers.MoveController;
 import controllers.QueryController;
@@ -20,7 +21,9 @@ import entities.Programme;
 import entities.Room;
 import entities.TTSlot;
 import entities.Staff;
+import entities.StaffTimetable;
 import entities.Student;
+import entities.StudentTimetable;
 
 @SuppressWarnings("unused")
 public class StartUp
@@ -28,21 +31,8 @@ public class StartUp
 	public static void main(String[] args)
 	{		
 		String filePath = "H:\\Neil Urquhart\\TT-Data.xlsx";
-		FileLoadController controller = FileLoadController.getInstance(filePath);
-		controller.readTimetableData();
-		QueryController queryCont = new QueryController(controller.getTimetableData());
-		MoveController moveController = new MoveController(controller.getTimetableData());
-		Programme p = queryCont.getProgrammeByName("bsccomputing");
-		Module m = queryCont.getModuleByName("csn07101");
-		Room r = queryCont.getRoomByName("mer_a17");
-		Staff s = queryCont.getStaffByName("sybill");
-		Event e = queryCont.getEventById(1);
-		List<Event> events = queryCont.getEventByType(EventType.LECTURE);
-		
-		for(Event event : events)
-		{
-			System.out.println(event);
-			System.out.println();
-		}
+		FacadeController facade = FacadeController.getInstance(filePath);
+		StudentTimetable studenTT = facade.getTimetableForStudent("MATRIC NUMBER");
+		StaffTimetable staffTT = facade.getTimetableForStaff("STAFF NAME HERE");
 	}
 }

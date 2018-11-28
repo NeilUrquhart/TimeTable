@@ -107,29 +107,8 @@ public class TTSlot
 		if (getClass() != obj.getClass())
 			return false;
 		TTSlot other = (TTSlot) obj;
-		if (day != other.day)
-			return false;
-		if (endTime == null)
-		{
-			if (other.endTime != null)
-				return false;
-		} else if (!endTime.equals(other.endTime))
-			return false;
-		if (event == null)
-		{
-			if (other.event != null)
-				return false;
-		} else if (!event.equals(other.event))
-			return false;
-		if (id != other.id)
-			return false;
-		if (isUsed != other.isUsed)
-			return false;
-		if (startTime == null)
-		{
-			if (other.startTime != null)
-				return false;
-		} else if (!startTime.equals(other.startTime))
+		
+		if(this.id != other.getId())
 			return false;
 		return true;
 	}
