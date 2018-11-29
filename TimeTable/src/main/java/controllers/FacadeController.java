@@ -57,20 +57,24 @@ public class FacadeController
 					+ "\nClass: " + getClass().getSimpleName()
 					+ "\nMethod: getTimetableForStudent");
 		
-		List<TTSlot> slots = new ArrayList<TTSlot>();
-		for(StudentInEvent event : student.getEvents())
+		// I DONT LIKE THIS BUT CANT GET IT ANY OTHER WAY
+		// WITHOUT CREATING MULTIPLE LISTS CAUSE OF STUPID PASS BY REFERENCE
+		// AND .CONTAINS ON A LIST NOT BEING NICE
+		List<TTSlot> slots = new ArrayList<TTSlot>(data.getSlots().values());
+		for(TTSlot slot : slots)
 		{
-			for(TTSlot slot : event.getEvent().getSlots())
+			slot.setEvent(null);
+			slot.setUsed(false);
+			for(StudentInEvent event : student.getEvents())
 			{
-				slots.add(slot);
-			}
-		}
-		
-		for(TTSlot slot : data.getSlots().values())
-		{
-			if(!slots.contains(slot))
-			{
-				slots.add(slot);
+				for(TTSlot slotInEvent : event.getEvent().getSlots())
+				{
+					if(slotInEvent.getId() == slot.getId())
+					{
+						slot.setEvent(event.getEvent());
+						slot.setUsed(true);
+					}
+				}
 			}
 		}
 		
@@ -92,20 +96,23 @@ public class FacadeController
 					+ "\nClass: " + getClass().getSimpleName()
 					+ "\nMethod: getTimetableForStaff");
 		
-		List<TTSlot> slots = new ArrayList<TTSlot>();
-		for(Event event : staff.getEvents())
+		// SEE ABOVE METHOD
+		List<TTSlot> slots = new ArrayList<TTSlot>(data.getSlots().values());
+		for(TTSlot slot : slots)
 		{
-			for(TTSlot slot : event.getSlots())
+			slot.setEvent(null);
+			slot.setUsed(false);
+			
+			for(Event event : staff.getEvents())
 			{
-				slots.add(slot);
-			}
-		}
-		
-		for(TTSlot slot : data.getSlots().values())
-		{
-			if(!slots.contains(slot))
-			{
-				slots.add(slot);
+				for(TTSlot slotInEvent : event.getSlots())
+				{
+					if(slot.getId() == slotInEvent.getId())
+					{
+						slot.setEvent(event);
+						slot.setUsed(true);
+					}
+				}
 			}
 		}
 		

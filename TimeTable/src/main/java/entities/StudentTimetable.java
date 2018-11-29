@@ -35,4 +35,10 @@ public class StudentTimetable
 		setStudent(student);
 		setSlots(slots);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "";
+	}
 }

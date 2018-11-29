@@ -35,4 +35,10 @@ public class StaffTimetable
 		setStaff(staff);
 		setSlots(slots);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "";
+	}
 }
