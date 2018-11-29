@@ -44,7 +44,7 @@ public class FacadeController
 	public StudentTimetable getTimetableForStudent(String matric)
 	{
 		if(matric == null || matric == "")
-			throw new RuntimeException("No Matric Number Supplied"
+			throw new RuntimeException("\nNo Matric Number Supplied"
 					+ "\nClass: " + getClass().getSimpleName()
 					+ "\nMethod: getTimetableForStudent");
 		
@@ -53,7 +53,7 @@ public class FacadeController
 		Student student = queryController.getStudentByMatric(matric);
 		
 		if(student == null)
-			throw new RuntimeException("No Student found with that Matric"
+			throw new RuntimeException("\nNo Student found with that Matric"
 					+ "\nClass: " + getClass().getSimpleName()
 					+ "\nMethod: getTimetableForStudent");
 		
@@ -84,7 +84,7 @@ public class FacadeController
 	public StaffTimetable getTimetableForStaff(String name)
 	{
 		if(name == null || name == "")
-			throw new RuntimeException("No Staff Name Supplied"
+			throw new RuntimeException("\nNo Staff Name Supplied"
 					+ "\nClass: " + getClass().getSimpleName()
 					+ "\nMethod: getTimetableForStaff");
 		
@@ -92,7 +92,7 @@ public class FacadeController
 		
 		Staff staff = queryController.getStaffByName(name);
 		if(staff == null)
-			throw new RuntimeException("No Staff found with that Name"
+			throw new RuntimeException("\nNo Staff found with that Name"
 					+ "\nClass: " + getClass().getSimpleName()
 					+ "\nMethod: getTimetableForStaff");
 		

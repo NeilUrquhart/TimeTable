@@ -31,7 +31,9 @@ public class StartUp
 	{		
 		String filePath = "H:\\Neil Urquhart\\TT-Data.xlsx";
 		FacadeController facade = FacadeController.getInstance(filePath);
-		StudentTimetable studenTT = facade.getTimetableForStudent("MATRIC NUMBER");
-		StaffTimetable staffTT = facade.getTimetableForStaff("STAFF NAME HERE");
+		//StudentTimetable studentTT = facade.getTimetableForStudent("4");
+		StaffTimetable staffTT = facade.getTimetableForStaff("sybill");
+		
+		System.out.println(staffTT.toString());
 	}
 }

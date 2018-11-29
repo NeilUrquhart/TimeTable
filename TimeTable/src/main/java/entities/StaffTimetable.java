@@ -3,10 +3,14 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import toStringHelpers.ObjectToString;
+import toStringHelpers.StaffTimetableToString;
+
 public class StaffTimetable 
 {
 	private Staff staff;
 	private List<TTSlot> slots;
+	private ObjectToString objectToString;
 	
 	public Staff getStaff()
 	{
@@ -34,11 +38,12 @@ public class StaffTimetable
 	{
 		setStaff(staff);
 		setSlots(slots);
+		objectToString = new StaffTimetableToString(this);
 	}
 	
 	@Override
 	public String toString()
 	{
-		return "";
+		return objectToString.stringify();
 	}
 }
