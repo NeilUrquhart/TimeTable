@@ -118,4 +118,16 @@ public class FacadeController
 		
 		return new StaffTimetable(staff, slots);
 	}
+	
+	public List<String> getStaffIDs(){
+		//Return a list of all staff within the system
+		queryController = new QueryController(data);
+		return queryController.getStaffIDs();
+	}
+	
+	public List<String> getStudentIDs(){
+		//Return a list of all staff within the system
+		queryController = new QueryController(data);
+		return queryController.getStudentIDs();
+	}
 }

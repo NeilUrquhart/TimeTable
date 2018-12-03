@@ -29,7 +29,9 @@ public class StartUp
 {
 	public static void main(String[] args)
 	{		
-		String filePath = "H:\\Neil Urquhart\\TT-Data.xlsx";
+		String filePath = "H:\\docs\\TimeTables\\BigTimetableData.xlsx";
+		//String filePath = "H:\\docs\\TimeTables\\TT-Data.xlsx";
+		
 		FacadeController facade = FacadeController.getInstance(filePath);
 		//StudentTimetable studentTT = facade.getTimetableForStudent("4");
 		StaffTimetable staffTT = facade.getTimetableForStaff("sybill");

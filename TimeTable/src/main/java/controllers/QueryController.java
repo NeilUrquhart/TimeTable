@@ -135,4 +135,18 @@ public class QueryController
 		}
 		return result;
 	}
+	
+	public List<String> getStaffIDs(){
+		//Return a list of all staff ids
+		ArrayList<String> res = new ArrayList<String>();
+		res.addAll(data.getStaff().keySet());
+		return res;
+	}
+	
+	public List<String> getStudentIDs(){
+		//Return a list of all student ids
+		ArrayList<String> res = new ArrayList<String>();
+		res.addAll(data.getStudents().keySet());
+		return res;
+	}
 }
