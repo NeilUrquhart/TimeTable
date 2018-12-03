@@ -2,10 +2,12 @@ package entities;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.ProgrammeToString;
 
-public class Programme
+public class Programme implements Concept
 {
 	private String name;
 	private List<Module> modules;

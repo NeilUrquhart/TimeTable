@@ -1,9 +1,10 @@
 package entities;
 
+import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.SlotToString;
 
-public class TTSlot
+public class TTSlot implements Concept
 {
 	private int id;
 	private DayOfWeek day;

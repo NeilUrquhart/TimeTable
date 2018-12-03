@@ -3,7 +3,9 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomTimetable 
+import jade.content.Concept;
+
+public class RoomTimetable implements Concept
 {
 	private Room room;
 	private List<TTSlot> slots;

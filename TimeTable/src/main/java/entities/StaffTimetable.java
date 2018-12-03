@@ -3,10 +3,11 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.StaffTimetableToString;
 
-public class StaffTimetable 
+public class StaffTimetable implements Concept
 {
 	private Staff staff;
 	private List<TTSlot> slots;
