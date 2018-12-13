@@ -4,7 +4,7 @@ import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.SlotToString;
 
-public class TTSlot implements Concept
+public class TTSlot
 {
 	private int id;
 	private DayOfWeek day;

@@ -1,5 +1,7 @@
 package entities;
 
+
+
 public enum EventType
 {
 	LECTURE,

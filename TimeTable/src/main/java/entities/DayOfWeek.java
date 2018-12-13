@@ -1,6 +1,6 @@
 package entities;
 
-public enum DayOfWeek
+public enum DayOfWeek 
 {
 	MONDAY,
 	TUESDAY,

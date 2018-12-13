@@ -5,7 +5,7 @@ import java.util.List;
 
 import jade.content.Concept;
 
-public class RoomTimetable implements Concept
+public class RoomTimetable 
 {
 	private Room room;
 	private List<TTSlot> slots;

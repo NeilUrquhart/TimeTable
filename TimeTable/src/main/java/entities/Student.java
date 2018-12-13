@@ -8,13 +8,13 @@ import toStringHelpers.ObjectToString;
 import toStringHelpers.StudentToString;
 import jade.content.onto.annotations.Slot;
 
-public class Student implements Concept
+public class Student 
 {
 	private String matric;
 	private List<StudentInEvent> events;
 	private ObjectToString studentToString;
 	
-	@Slot(mandatory = true)
+
 	public String getMatric()
 	{
 		return matric;

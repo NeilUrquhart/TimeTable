@@ -9,14 +9,14 @@ import jade.content.onto.annotations.Slot;
 import toStringHelpers.ModuleToString;
 import toStringHelpers.ObjectToString;
 
-public class Module implements Concept
+public class Module
 {
 	private String name;
 	private String description;
 	private List<Event> events;
 	private ObjectToString moduleToString;
 	
-	@Slot (mandatory = true)
+
 	public String getName()
 	{
 		return name;
@@ -26,8 +26,8 @@ public class Module implements Concept
 	{
 		return description;
 	}
-	
-	@AggregateSlot(cardMin = 1)//Must have at least one event
+
+
 	public List<Event> getEvents()
 	{
 		return events;

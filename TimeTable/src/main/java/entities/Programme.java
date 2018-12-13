@@ -7,7 +7,7 @@ import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.ProgrammeToString;
 
-public class Programme implements Concept
+public class Programme 
 {
 	private String name;
 	private List<Module> modules;

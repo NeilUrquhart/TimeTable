@@ -1,6 +1,6 @@
 package entities;
 
-public class StudentInEvent
+public class StudentInEvent 
 {
 	private Student student;
 	private Event event;

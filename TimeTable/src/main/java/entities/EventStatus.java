@@ -1,6 +1,8 @@
 package entities;
 
-public enum EventStatus
+
+
+public enum EventStatus 
 {
 	RED,
 	YELLOW,

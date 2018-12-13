@@ -8,7 +8,7 @@ import toStringHelpers.ObjectToString;
 import toStringHelpers.RoomToString;
 import jade.content.onto.annotations.Slot;
 
-public class Room implements Concept
+public class Room 
 {
 	private String name;
 	private int capacity;
@@ -16,13 +16,13 @@ public class Room implements Concept
 	private List<Slot> slots;
 	private ObjectToString roomToString;
 	
-	@Slot (mandatory = true)
+
 	public String getName()
 	{
 		return name;
 	}
 	
-	@Slot (mandatory = true)
+
 	public int getCapacity()
 	{
 		return capacity;

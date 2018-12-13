@@ -7,7 +7,7 @@ import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.StudentTimetableToString;
 
-public class StudentTimetable implements Concept
+public class StudentTimetable 
 {
 	private Student student;
 	private List<TTSlot> slots;

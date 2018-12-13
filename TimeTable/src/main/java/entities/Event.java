@@ -7,7 +7,7 @@ import jade.content.Concept;
 import toStringHelpers.EventToString;
 import toStringHelpers.ObjectToString;
 
-public class Event implements Concept
+public class Event 
 {
 	private int id;
 	private EventType type;

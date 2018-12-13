@@ -8,13 +8,12 @@ import toStringHelpers.ObjectToString;
 import toStringHelpers.StaffToString;
 import jade.content.onto.annotations.Slot;
 
-public class Staff implements Concept
+public class Staff 
 {
 	private String name;
 	private List<Event> events;
 	private ObjectToString staffToString;
 	
-	@Slot(mandatory = true)
 	public String getName()
 	{
 		return name;
