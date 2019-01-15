@@ -3,10 +3,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.StaffToString;
-import jade.content.onto.annotations.Slot;
 
 public class Staff 
 {

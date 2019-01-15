@@ -1,6 +1,5 @@
 package entities;
 
-import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.SlotToString;
 

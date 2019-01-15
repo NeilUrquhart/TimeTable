@@ -3,9 +3,6 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import jade.content.Concept;
-import jade.content.Predicate;
-import jade.content.onto.annotations.Slot;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.StaffTimetableToString;
 

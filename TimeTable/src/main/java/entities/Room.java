@@ -3,7 +3,6 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.RoomToString;
 import jade.content.onto.annotations.Slot;
@@ -13,7 +12,7 @@ public class Room
 	private String name;
 	private int capacity;
 	private List<Event> events;
-	private List<Slot> slots;
+	private List<TTSlot> slots;
 	private ObjectToString roomToString;
 	
 
@@ -31,7 +30,7 @@ public class Room
 	{
 		return events;
 	}
-	public List<Slot> getSlots()
+	public List<TTSlot> getSlots()
 	{
 		return slots;
 	}
@@ -48,7 +47,7 @@ public class Room
 	{
 		this.events = events;
 	}
-	public void setSlots(List<Slot> slots)
+	public void setSlots(List<TTSlot> slots)
 	{
 		this.slots = slots;
 	}
@@ -62,7 +61,7 @@ public class Room
 		setName(name);
 		setCapacity(capacity);
 		setEvents(new ArrayList<Event>());
-		setSlots(new ArrayList<Slot>());
+		setSlots(new ArrayList<TTSlot>());
 		roomToString = new RoomToString(this);
 	}
 	

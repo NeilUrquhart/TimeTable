@@ -3,7 +3,6 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import jade.content.Concept;
 
 public class RoomTimetable 
 {

@@ -3,10 +3,8 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import jade.content.Concept;
 import toStringHelpers.ObjectToString;
 import toStringHelpers.StudentToString;
-import jade.content.onto.annotations.Slot;
 
 public class Student 
 {
