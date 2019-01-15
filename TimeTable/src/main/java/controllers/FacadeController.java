@@ -11,6 +11,8 @@ import entities.Student;
 import entities.StudentInEvent;
 import entities.StudentTimetable;
 import entities.TTSlot;
+import returnCodes.ResponseMove;
+import returnCodes.StudentMoveCode;
 
 public class FacadeController 
 {
@@ -129,5 +131,17 @@ public class FacadeController
 		//Return a list of all staff within the system
 		queryController = new QueryController(data);
 		return queryController.getStudentIDs();
+	}
+	
+	public StudentMoveCode swapStudents(Student studentOne, Event eventOne, Student studentTwo, Event eventTwo)
+	{
+		studentMove.setTimetableData(data);
+		StudentMoveCode result = studentMove.swapStudents(studentOne, eventOne, studentTwo, eventTwo);
+		if(result == StudentMoveCode.OK)
+		{
+			data = studentMove.getTimetableData();
+			return result;
+		}
+		return result;
 	}
 }
