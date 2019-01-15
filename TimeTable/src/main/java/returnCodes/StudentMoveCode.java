@@ -2,7 +2,8 @@ package returnCodes;
 
 public enum StudentMoveCode 
 {
-	ACCEPTED,
+	OK,
 	NO_SPACE,
 	NO_EVENT,
+	NO_MOVE
 }
