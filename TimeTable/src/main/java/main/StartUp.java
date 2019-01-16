@@ -36,6 +36,8 @@ public class StartUp
 		//StudentTimetable studentTT = facade.getTimetableForStudent("4");
 		StaffTimetable staffTT = facade.getTimetableForStaff("sybill");
 		
+		//facade.swapStudents(studentOne, eventOne, studentTwo, eventTwo);
+		
 		System.out.println(staffTT.toString());
 	}
 }
