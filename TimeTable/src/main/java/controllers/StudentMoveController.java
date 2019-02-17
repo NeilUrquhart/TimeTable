@@ -50,16 +50,6 @@ public class StudentMoveController
 			return StudentMoveCode.NO_MOVE;
 		}
 		
-		// Check to see if the student can actually move into the new event
-		if(!canStudentMove(studentOne, eventTwo))
-		{
-			return StudentMoveCode.NO_MOVE;
-		}
-		if(!canStudentMove(studentTwo, eventOne))
-		{
-			return StudentMoveCode.NO_MOVE;
-		}
-		
 		// Add event to student
 		studentOne = addNewEventToStudent(studentOne, eventTwo);
 		studentTwo = addNewEventToStudent(studentTwo, eventOne);

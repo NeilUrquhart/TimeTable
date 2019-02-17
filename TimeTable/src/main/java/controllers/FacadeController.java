@@ -135,13 +135,24 @@ public class FacadeController
 	
 	public StudentMoveCode swapStudents(Student studentOne, Event eventOne, Student studentTwo, Event eventTwo)
 	{
+		StudentMoveCode result = StudentMoveCode.NO_MOVE;
 		studentMove.setTimetableData(data);
-		StudentMoveCode result = studentMove.swapStudents(studentOne, eventOne, studentTwo, eventTwo);
-		if(result == StudentMoveCode.OK)
+		ResponseMove resultOne = studentMove.canStudentMoveToEvent(studentOne, eventTwo);
+		ResponseMove resultTwo = studentMove.canStudentMoveToEvent(studentTwo, eventOne);
+		if(resultOne == ResponseMove.OK && resultTwo == ResponseMove.OK)
 		{
-			data = studentMove.getTimetableData();
-			return result;
+			result = studentMove.swapStudents(studentOne, eventOne, studentTwo, eventTwo);
 		}
+		
+		if(resultOne != ResponseMove.OK)
+		{
+			result = StudentMoveCode.NO_MOVE;
+		}
+		if(resultTwo != ResponseMove.OK)
+		{
+			result = StudentMoveCode.NO_MOVE;
+		}
+		
 		return result;
 	}
 }
