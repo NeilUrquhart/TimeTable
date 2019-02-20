@@ -28,7 +28,7 @@ public class StaffMoveController
 		{
 			if(staffEvent.getId() == event.getId())
 			{
-				return ResponseMove.NO_ROOM_AVAILABLE;
+				return ResponseMove.ALREADY_IN_EVENT;
 			}
 		}
 		
@@ -41,7 +41,7 @@ public class StaffMoveController
 				{
 					if(eventSlot.getId() == staffSlot.getId())
 					{
-						return ResponseMove.NO_ROOM_AVAILABLE;
+						return ResponseMove.NO_TIME_AVAILABLE;
 					}
 				}
 			}

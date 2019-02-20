@@ -219,6 +219,19 @@ public class FacadeController
 		return ResponseMove.OK;
 	}
 	
+	public ResponseMove moveStaffToNewEvent(Staff staff, Event event)
+	{
+		StaffMoveController staffMove = new StaffMoveController(data);
+		ResponseMove canStaffMove = staffMove.canStaffMoveEvent(staff, event);
+		if(canStaffMove != ResponseMove.OK)
+		{
+			return canStaffMove;
+		}
+		
+		staffMove.moveStaffToEvent(staff, event);
+		data = staffMove.getTimetableData();
+		return ResponseMove.OK;
+	}
 	
 	
 	private void createNewStudentMoveController()

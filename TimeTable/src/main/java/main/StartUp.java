@@ -78,7 +78,13 @@ public class StartUp
 //		
 //		System.out.println(swapResult);
 		
-		Staff staff = facade.getStaffByName("sybill");
-		System.out.println(staff);
+//		Staff staff = facade.getStaffByName("sybill");
+//		Event staffEvent = facade.getEventById(1);
+//		System.out.println(staff);
+//		
+//		// Returns NO_TIME_AVAILABLE as they are already working in same slot
+//		// In this case Event ID: 12 has the same slot as Event ID: 1
+//		ResponseMove canStaffMove = facade.moveStaffToNewEvent(staff, staffEvent);
+//		System.out.println(canStaffMove);
 	}
 }
