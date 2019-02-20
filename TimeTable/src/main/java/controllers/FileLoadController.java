@@ -37,10 +37,30 @@ public class FileLoadController
 	{
 		if(this.filePath.equals(""))
 		{
-			throw new RuntimeException("\nFile Path not supplied"
+			testMode();
+		}
+		else 
+		{
+			liveMode();
+		}
+	}
+	
+	public void testMode()
+	{
+		TimetableExcelDataReader dataReader = new TimetableExcelDataReader(DataReaderSetting.TESTING);
+		timetableData = dataReader.getData("");
+		if(timetableData == null)
+		{
+			throw new RuntimeException("\nError Reading Data"
 					+ "\nClass: " + getClass().getSimpleName() 
 					+ "\nMethod: readTimetableData");
 		}
+		
+		getProgrammeData();
+	}
+	
+	private void liveMode()
+	{
 		TimetableExcelDataReader dataReader = new TimetableExcelDataReader(DataReaderSetting.LIVE);
 		timetableData = dataReader.getData(filePath);
 		if(timetableData == null)
@@ -50,6 +70,11 @@ public class FileLoadController
 					+ "\nMethod: readTimetableData");
 		}
 		
+		getProgrammeData();
+	}
+	
+	private void getProgrammeData()
+	{
 		ProgrammeCsvReader progReader = new ProgrammeCsvReader();
 		Map<String, Programme> programmes = progReader.read();
 		for(Programme p : programmes.values())

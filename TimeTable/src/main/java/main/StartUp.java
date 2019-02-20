@@ -29,10 +29,13 @@ public class StartUp
 {
 	public static void main(String[] args)
 	{		
-		String filePath = "H:\\docs\\TimeTables\\BigTimetableData.xlsx";
-		//String filePath = "H:\\docs\\TimeTables\\TT-Data.xlsx";
+		// Actual file path will access the given file
+		String liveFilePath = "H:\\docs\\TimeTables\\BigTimetableData.xlsx";
 		
-		FacadeController facade = FacadeController.getInstance(filePath);
+		// blank file path will access the the test mode with built in data set
+		String testFilePath = "";
+		
+		FacadeController facade = FacadeController.getInstance(testFilePath);
 		//StudentTimetable studentTT = facade.getTimetableForStudent("4");
 		StaffTimetable staffTT = facade.getTimetableForStaff("sybill");
 		
