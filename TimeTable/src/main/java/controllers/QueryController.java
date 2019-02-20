@@ -149,4 +149,18 @@ public class QueryController
 		res.addAll(data.getStudents().keySet());
 		return res;
 	}
+	
+	public List<Event> getAllEvents()
+	{
+		List<Event> result = new ArrayList<Event>();
+		result.addAll(data.getEvents().values());
+		return result;
+	}
+	
+	public List<Student> getAllStudents()
+	{
+		List<Student> result = new ArrayList<Student>();
+		result.addAll(data.getStudents().values());
+		return result;
+	}
 }

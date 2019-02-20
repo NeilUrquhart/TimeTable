@@ -19,6 +19,7 @@ import entities.Module;
 import entities.Programme;
 import entities.Room;
 import entities.TTSlot;
+import returnCodes.ResponseMove;
 import entities.Staff;
 import entities.StaffTimetable;
 import entities.Student;
@@ -36,11 +37,48 @@ public class StartUp
 		String testFilePath = "";
 		
 		FacadeController facade = FacadeController.getInstance(testFilePath);
-		//StudentTimetable studentTT = facade.getTimetableForStudent("4");
-		StaffTimetable staffTT = facade.getTimetableForStaff("sybill");
 		
-		//facade.swapStudents(studentOne, eventOne, studentTwo, eventTwo);
+//		List<Event> events = facade.getAllEvents();
+//		for(Event event : events)
+//		{
+//			System.out.println(event.toString());
+//		}
 		
-		System.out.println(staffTT.toString());
+//		List<Student> students = facade.getAllStudents();
+//		for(Student student : students)
+//		{
+//			System.out.println(student.toString());
+//		}
+		
+//		Event event = facade.getEventById(4);
+//		Student student = facade.getStudentByMatric("30");
+//		
+//		System.out.println(event.toString());
+//		System.out.println();
+//		System.out.println(student.toString());
+//		System.out.println();
+//		
+//		ResponseMove result = facade.moveStudentToNewEvent(student, event);
+//		System.out.println(result);
+//		
+//		event = facade.getEventById(4);
+//		student = facade.getStudentByMatric("30");
+//		
+//		System.out.println(event.toString());
+//		System.out.println();
+//		System.out.println(student.toString());
+//		System.out.println();
+		
+//		Event eventOne = facade.getEventById(1);
+//		Student studentOne = facade.getStudentByMatric("1");
+//		Event eventTwo = facade.getEventById(9);
+//		Student studentTwo = facade.getStudentByMatric("11");
+//		
+//		ResponseMove swapResult = facade.swapStudentsBetweenEvents(studentOne, eventOne, studentTwo, eventTwo);
+//		
+//		System.out.println(swapResult);
+		
+		Staff staff = facade.getStaffByName("sybill");
+		System.out.println(staff);
 	}
 }

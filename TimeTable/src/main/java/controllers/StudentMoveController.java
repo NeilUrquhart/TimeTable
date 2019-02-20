@@ -77,6 +77,14 @@ public class StudentMoveController
 		return StudentMoveCode.OK;
 	}
 	
+	public void moveStudentToEvent(Student student, Event event)
+	{
+		student = addNewEventToStudent(student, event);
+		event = addNewStudentToEvent(event, student);
+		updateStudentTimetableData(student);
+		updateEventTimetableData(event);
+	}
+	
 	// Check to make sure there is no slot collisions with the new events
 	private boolean canStudentMove(Student student, Event event)
 	{

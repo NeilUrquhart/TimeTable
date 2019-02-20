@@ -133,6 +133,36 @@ public class FacadeController
 		return queryController.getStudentIDs();
 	}
 	
+	public List<Event> getAllEvents()
+	{
+		queryController = new QueryController(data);
+		return queryController.getAllEvents();
+	}
+	
+	public List<Student> getAllStudents()
+	{
+		queryController = new QueryController(data);
+		return queryController.getAllStudents();
+	}
+	
+	public Event getEventById(int id)
+	{
+		queryController = new QueryController(data);
+		return queryController.getEventById(id);
+	}
+	
+	public Student getStudentByMatric(String matric)
+	{
+		queryController = new QueryController(data);
+		return queryController.getStudentByMatric(matric);
+	}
+	
+	public Staff getStaffByName(String name)
+	{
+		queryController = new QueryController(data);
+		return queryController.getStaffByName(name);
+	}
+	
 	public StudentMoveCode swapStudents(Student studentOne, Event eventOne, Student studentTwo, Event eventTwo)
 	{
 		StudentMoveCode result = StudentMoveCode.NO_MOVE;
@@ -154,5 +184,46 @@ public class FacadeController
 		}
 		
 		return result;
+	}
+	
+	public ResponseMove moveStudentToNewEvent(Student student, Event event)
+	{
+		createNewStudentMoveController();
+		ResponseMove canStudentMove = studentMove.canStudentMoveToEvent(student, event);
+		if(canStudentMove != ResponseMove.OK)
+		{
+			return canStudentMove;
+		}
+		studentMove.moveStudentToEvent(student, event);
+		data = studentMove.getTimetableData();
+		return ResponseMove.OK;
+	}
+	
+	public ResponseMove swapStudentsBetweenEvents(Student studentOne, Event eventOne, Student studentTwo, Event eventTwo)
+	{
+		createNewStudentMoveController();
+		ResponseMove studentOneResult = studentMove.canStudentMoveToEvent(studentOne, eventTwo);
+		ResponseMove studentTwoResult = studentMove.canStudentMoveToEvent(studentTwo, eventOne);
+		if(studentOneResult != ResponseMove.OK && studentTwoResult != ResponseMove.OK)
+		{
+			return ResponseMove.NO_ROOM_AVAILABLE;
+		}
+		
+		StudentMoveCode swapResult = studentMove.swapStudents(studentOne, eventOne, studentTwo, eventTwo);
+		if(swapResult != StudentMoveCode.OK)
+		{
+			throw new RuntimeException("Students Unable to swap: " + swapResult);
+		}
+			
+		data = studentMove.getTimetableData();
+		return ResponseMove.OK;
+	}
+	
+	
+	
+	private void createNewStudentMoveController()
+	{
+		studentMove = new StudentMoveController();
+		studentMove.setTimetableData(data);
 	}
 }
