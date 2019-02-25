@@ -186,15 +186,20 @@ public class FacadeController
 		return result;
 	}
 	
-	public ResponseMove moveStudentToNewEvent(Student student, Event event)
+	public ResponseMove moveStudentToNewEvent(Student student, Event event, Event oldEvent)
 	{
+			
+			
 		createNewStudentMoveController();
 		ResponseMove canStudentMove = studentMove.canStudentMoveToEvent(student, event);
 		if(canStudentMove != ResponseMove.OK)
 		{
 			return canStudentMove;
 		}
-		studentMove.moveStudentToEvent(student, event);
+		studentMove.moveStudentToEvent(student, event, oldEvent);
+		
+	
+	
 		data = studentMove.getTimetableData();
 		return ResponseMove.OK;
 	}

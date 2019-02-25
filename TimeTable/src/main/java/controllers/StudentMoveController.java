@@ -77,10 +77,18 @@ public class StudentMoveController
 		return StudentMoveCode.OK;
 	}
 	
-	public void moveStudentToEvent(Student student, Event event)
+	public void moveStudentToEvent(Student student, Event event, Event oldEvent)
 	{
 		student = addNewEventToStudent(student, event);
 		event = addNewStudentToEvent(event, student);
+		//Remove old event?
+		//Remove student from old event
+		// Remove old event from students
+		removeEventFromStudent(student, oldEvent);
+		
+		// Remove old student from the events
+		removeStudentFromEvent(oldEvent, student);
+		//
 		updateStudentTimetableData(student);
 		updateEventTimetableData(event);
 	}

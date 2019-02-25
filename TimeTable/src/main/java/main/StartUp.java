@@ -35,56 +35,60 @@ public class StartUp
 		
 		// blank file path will access the the test mode with built in data set
 		String testFilePath = "";
+		/*
+		FacadeController facade = FacadeController.getInstance(testFilePath); //loads tt data
 		
-		FacadeController facade = FacadeController.getInstance(testFilePath);
+		List<Event> events = facade.getAllEvents();
+		for(Event event : events)
+		{
+			System.out.println(event.toString());
+		}
 		
-//		List<Event> events = facade.getAllEvents();
-//		for(Event event : events)
-//		{
-//			System.out.println(event.toString());
-//		}
+		List<Student> students = facade.getAllStudents();
+		for(Student student : students)
+		{
+			System.out.println(student.toString());
+		}
 		
-//		List<Student> students = facade.getAllStudents();
-//		for(Student student : students)
-//		{
-//			System.out.println(student.toString());
-//		}
+		Event event = facade.getEventById(4);
+		Student student = facade.getStudentByMatric("30");
+
+		System.out.println(event.toString());
+		System.out.println();
+		System.out.println(student.toString());
+		System.out.println();
+
+		ResponseMove result = facade.moveStudentToNewEvent(student, event);
+		System.out.println(result);
 		
-//		Event event = facade.getEventById(4);
-//		Student student = facade.getStudentByMatric("30");
-//		
-//		System.out.println(event.toString());
-//		System.out.println();
-//		System.out.println(student.toString());
-//		System.out.println();
-//		
-//		ResponseMove result = facade.moveStudentToNewEvent(student, event);
-//		System.out.println(result);
-//		
-//		event = facade.getEventById(4);
-//		student = facade.getStudentByMatric("30");
-//		
-//		System.out.println(event.toString());
-//		System.out.println();
-//		System.out.println(student.toString());
-//		System.out.println();
+		event = facade.getEventById(4);
+		student = facade.getStudentByMatric("30");
+		System.out.println(facade.getTimetableForStudent("30"));
 		
-//		Event eventOne = facade.getEventById(1);
-//		Student studentOne = facade.getStudentByMatric("1");
-//		Event eventTwo = facade.getEventById(9);
-//		Student studentTwo = facade.getStudentByMatric("11");
-//		
-//		ResponseMove swapResult = facade.swapStudentsBetweenEvents(studentOne, eventOne, studentTwo, eventTwo);
-//		
-//		System.out.println(swapResult);
 		
-//		Staff staff = facade.getStaffByName("sybill");
-//		Event staffEvent = facade.getEventById(1);
-//		System.out.println(staff);
-//		
+		System.out.println(event.toString());
+		System.out.println();
+		System.out.println(student.toString());
+		System.out.println();
+		
+		Event eventOne = facade.getEventById(1);
+		Student studentOne = facade.getStudentByMatric("1");
+		Event eventTwo = facade.getEventById(9);
+		Student studentTwo = facade.getStudentByMatric("11");
+		
+		ResponseMove swapResult = facade.swapStudentsBetweenEvents(studentOne, eventOne, studentTwo, eventTwo);
+		
+		System.out.println(swapResult);
+		System.out.println(facade.getTimetableForStudent("1"));
+		System.out.println(facade.getTimetableForStudent("11"));
+		
+		
+		Staff staff = facade.getStaffByName("sybill");
+		Event staffEvent = facade.getEventById(1);
+		System.out.println(staff);
 //		// Returns NO_TIME_AVAILABLE as they are already working in same slot
 //		// In this case Event ID: 12 has the same slot as Event ID: 1
-//		ResponseMove canStaffMove = facade.moveStaffToNewEvent(staff, staffEvent);
-//		System.out.println(canStaffMove);
+		ResponseMove canStaffMove = facade.moveStaffToNewEvent(staff, staffEvent);
+		System.out.println(canStaffMove);*/
 	}
 }
