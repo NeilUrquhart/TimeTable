@@ -1,8 +1,8 @@
 Room,Capacity
 MER_A17                                                                        ,250
 MER_B32                                                                        ,150
-MER_C27                                                                        ,6
-MER_G02                                                                        ,5
-MER_G09                                                                        ,5
-MER_G20                                                                        ,5
-MER_H11                                                                        ,5
+MER_C27                                                                        ,30
+MER_G02                                                                        ,20
+MER_G09                                                                        ,20
+MER_G20                                                                        ,20
+MER_H11                                                                        ,20

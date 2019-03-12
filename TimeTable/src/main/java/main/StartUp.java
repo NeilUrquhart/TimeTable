@@ -35,7 +35,7 @@ public class StartUp
 		
 		// blank file path will access the the test mode with built in data set
 		String testFilePath = "";
-		/*
+		
 		FacadeController facade = FacadeController.getInstance(testFilePath); //loads tt data
 		
 		List<Event> events = facade.getAllEvents();
@@ -58,8 +58,8 @@ public class StartUp
 		System.out.println(student.toString());
 		System.out.println();
 
-		ResponseMove result = facade.moveStudentToNewEvent(student, event);
-		System.out.println(result);
+		//ResponseMove result = facade.moveStudentToNewEvent(student, event);
+		//System.out.println(result);
 		
 		event = facade.getEventById(4);
 		student = facade.getStudentByMatric("30");
@@ -76,6 +76,9 @@ public class StartUp
 		Event eventTwo = facade.getEventById(9);
 		Student studentTwo = facade.getStudentByMatric("11");
 		
+		System.out.println(facade.getTimetableForStudent("1"));
+		System.out.println(facade.getTimetableForStudent("11"));
+		
 		ResponseMove swapResult = facade.swapStudentsBetweenEvents(studentOne, eventOne, studentTwo, eventTwo);
 		
 		System.out.println(swapResult);
@@ -89,6 +92,6 @@ public class StartUp
 //		// Returns NO_TIME_AVAILABLE as they are already working in same slot
 //		// In this case Event ID: 12 has the same slot as Event ID: 1
 		ResponseMove canStaffMove = facade.moveStaffToNewEvent(staff, staffEvent);
-		System.out.println(canStaffMove);*/
+		System.out.println(canStaffMove);
 	}
 }
