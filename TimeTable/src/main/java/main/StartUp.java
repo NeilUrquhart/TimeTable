@@ -36,7 +36,7 @@ public class StartUp
 		// blank file path will access the the test mode with built in data set
 		String testFilePath = "";
 		
-		FacadeController facade = FacadeController.getInstance(liveFilePath); //loads tt data
+		FacadeController facade = FacadeController.getInstance(testFilePath); //loads tt data
 		
 		List<Event> events = facade.getAllEvents();
 		for(Event event : events)

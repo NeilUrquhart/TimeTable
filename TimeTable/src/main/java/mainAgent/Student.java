@@ -1,4 +1,4 @@
-package ontology.elements;
+package mainAgent;
 
 public class Student {
 
