@@ -31,12 +31,12 @@ public class StartUp
 	public static void main(String[] args)
 	{		
 		// Actual file path will access the given file
-		String liveFilePath = "H:\\docs\\TimeTables\\BigTimetableData.xlsx";
+		String liveFilePath = "C:\\Users\\Michal Lange\\Documents\\TimeTable\\TimeTable\\target\\classes\\TT-Data.xlxs";
 		
 		// blank file path will access the the test mode with built in data set
 		String testFilePath = "";
 		
-		FacadeController facade = FacadeController.getInstance(testFilePath); //loads tt data
+		FacadeController facade = FacadeController.getInstance(liveFilePath); //loads tt data
 		
 		List<Event> events = facade.getAllEvents();
 		for(Event event : events)
