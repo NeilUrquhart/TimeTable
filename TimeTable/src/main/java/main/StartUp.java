@@ -1,9 +1,11 @@
 package main;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 import controllers.FacadeController;
@@ -31,12 +33,12 @@ public class StartUp
 	public static void main(String[] args)
 	{		
 		// Actual file path will access the given file
-		String liveFilePath = "C:\\Users\\Michal Lange\\Documents\\TimeTable\\TimeTable\\target\\classes\\TT-Data.xlxs";
+		String liveFilePath = "C:\\Users\\Michal Lange\\Documents\\TimeTable\\TimeTable\\src\\main\\resources\\rooms.xlxs";
 		
 		// blank file path will access the the test mode with built in data set
 		String testFilePath = "";
 		
-		FacadeController facade = FacadeController.getInstance(testFilePath); //loads tt data
+		FacadeController facade = FacadeController.getInstance(""); //loads tt data
 		
 		List<Event> events = facade.getAllEvents();
 		for(Event event : events)
