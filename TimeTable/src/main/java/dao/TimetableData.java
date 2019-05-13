@@ -3,13 +3,13 @@ package dao;
 import java.util.HashMap;
 import java.util.Map;
 
-import entities.Event;
-import entities.Module;
-import entities.Programme;
-import entities.Room;
-import entities.TTSlot;
-import entities.Staff;
-import entities.Student;
+import ontology.elements.Event;
+import ontology.elements.Module;
+import ontology.elements.Programme;
+import ontology.elements.Room;
+import ontology.elements.Staff;
+import ontology.elements.Student;
+import ontology.elements.TTSlot;
 
 public class TimetableData
 {

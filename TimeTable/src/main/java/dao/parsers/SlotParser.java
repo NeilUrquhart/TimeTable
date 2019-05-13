@@ -8,9 +8,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 import dao.SlotExcelDataReader;
-import entities.DayOfWeek;
-import entities.Event;
-import entities.TTSlot;
+import ontology.elements.DayOfWeek;
+import ontology.elements.Event;
+import ontology.elements.TTSlot;
 
 public class SlotParser
 {

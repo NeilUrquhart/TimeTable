@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.TimetableData;
-import entities.Event;
-import entities.Staff;
-import entities.StaffTimetable;
-import entities.Student;
-import entities.StudentInEvent;
-import entities.StudentTimetable;
-import entities.TTSlot;
+import ontology.elements.Event;
+import ontology.elements.Staff;
+import ontology.elements.StaffTimetable;
+import ontology.elements.Student;
+import ontology.elements.StudentInEvent;
+import ontology.elements.StudentTimetable;
+import ontology.elements.TTSlot;
 import returnCodes.ResponseMove;
 import returnCodes.StudentMoveCode;
 
@@ -189,7 +189,19 @@ public class FacadeController
 	public ResponseMove moveStudentToNewEvent(Student student, Event event, Event oldEvent)
 	{
 			
-			
+		// Check if student is in old Event
+		boolean hasOldEvent = false;
+		for (StudentInEvent e : student.getEvents()) {
+			if (e.getEvent().getId() == oldEvent.getId()) {
+				hasOldEvent = true;
+				break;
+			}
+		}
+		if (!hasOldEvent) {
+			return ResponseMove.NOT_IN_OLD_EVENT;
+		}
+		
+		
 		createNewStudentMoveController();
 		ResponseMove canStudentMove = studentMove.canStudentMoveToEvent(student, event);
 		if(canStudentMove != ResponseMove.OK)

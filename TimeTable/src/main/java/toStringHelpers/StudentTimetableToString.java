@@ -1,7 +1,7 @@
 package toStringHelpers;
 
-import entities.StudentTimetable;
-import entities.TTSlot;
+import ontology.elements.StudentTimetable;
+import ontology.elements.TTSlot;
 
 public class StudentTimetableToString implements ObjectToString 
 {

@@ -1,6 +1,6 @@
 package dao.parsers;
 
-import entities.DayOfWeek;
+import ontology.elements.DayOfWeek;
 
 public class DayOfWeekParser
 {

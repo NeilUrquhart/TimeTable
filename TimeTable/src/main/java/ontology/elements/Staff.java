@@ -1,50 +1,51 @@
-package entities;
+	package ontology.elements;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import toStringHelpers.ObjectToString;
-import toStringHelpers.ProgrammeToString;
+import toStringHelpers.StaffToString;
 
-public class Programme 
+public class Staff 
 {
 	private String name;
-	private List<Module> modules;
-	private ObjectToString progToString;
+	private List<Event> events;
+	private ObjectToString staffToString;
 	
 	public String getName()
 	{
 		return name;
 	}
-	public List<Module> getModules()
+	
+	public List<Event> getEvents()
 	{
-		return modules;
+		return events;
 	}
 	
 	public void setName(String name)
 	{
 		this.name = name;
 	}
-	public void setModules(List<Module> modules)
+	public void setEvents(List<Event> events)
 	{
-		this.modules = modules;
+		this.events = events;
 	}
 	
-	public Programme()
+	public Staff()
 	{
 		this("");
 	}
-	public Programme(String name)
+	public Staff(String name)
 	{
 		setName(name);
-		setModules(new ArrayList<Module>());
-		progToString = new ProgrammeToString(this);
+		setEvents(new ArrayList<Event>());
+		staffToString = new StaffToString(this);
 	}
 	
 	@Override
 	public String toString()
 	{
-		return progToString.stringify();
+		return staffToString.stringify();
 	}
 	
 	@Override
@@ -52,7 +53,7 @@ public class Programme
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((modules == null) ? 0 : modules.hashCode());
+		result = prime * result + ((events == null) ? 0 : events.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -65,12 +66,12 @@ public class Programme
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Programme other = (Programme) obj;
-		if (modules == null)
+		Staff other = (Staff) obj;
+		if (events == null)
 		{
-			if (other.modules != null)
+			if (other.events != null)
 				return false;
-		} else if (!modules.equals(other.modules))
+		} else if (!events.equals(other.events))
 			return false;
 		if (name == null)
 		{

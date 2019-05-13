@@ -2,10 +2,10 @@ package toStringHelpers;
 
 import java.util.List;
 
-import entities.Event;
-import entities.Room;
-import entities.TTSlot;
-import entities.StudentInEvent;
+import ontology.elements.Event;
+import ontology.elements.Room;
+import ontology.elements.StudentInEvent;
+import ontology.elements.TTSlot;
 
 public class EventToString implements ObjectToString
 {

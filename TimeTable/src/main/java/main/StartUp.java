@@ -15,17 +15,18 @@ import dao.DataReaderSetting;
 import dao.ProgrammeCsvReader;
 import dao.TimetableData;
 import dao.TimetableExcelDataReader;
-import entities.Event;
-import entities.EventType;
-import entities.Module;
-import entities.Programme;
-import entities.Room;
-import entities.TTSlot;
+import ontology.elements.Event;
+import ontology.elements.EventType;
+import ontology.elements.Module;
+import ontology.elements.Programme;
+import ontology.elements.Room;
+import ontology.elements.Staff;
+import ontology.elements.StaffTimetable;
+import ontology.elements.Student;
+import ontology.elements.StudentInEvent;
+import ontology.elements.StudentTimetable;
+import ontology.elements.TTSlot;
 import returnCodes.ResponseMove;
-import entities.Staff;
-import entities.StaffTimetable;
-import entities.Student;
-import entities.StudentTimetable;
 
 @SuppressWarnings("unused")
 public class StartUp
@@ -40,60 +41,51 @@ public class StartUp
 		
 		FacadeController facade = FacadeController.getInstance(""); //loads tt data
 		
-		List<Event> events = facade.getAllEvents();
-		for(Event event : events)
-		{
-			System.out.println(event.toString());
-		}
-		
-		List<Student> students = facade.getAllStudents();
-		for(Student student : students)
-		{
-			System.out.println(student.toString());
-		}
-		
-		Event event = facade.getEventById(4);
+		Event event = facade.getEventById(1);
+		Event event2 = facade.getEventById(5);
 		Student student = facade.getStudentByMatric("30");
-
-		System.out.println(event.toString());
-		System.out.println();
-		System.out.println(student.toString());
-		System.out.println();
-
-		//ResponseMove result = facade.moveStudentToNewEvent(student, event);
+		for (StudentInEvent e : student.getEvents()) {
+			//System.out.println(e.getEvent().getId());
+		}
+		
+		ResponseMove result = facade.moveStudentToNewEvent(student, event2, event);
+		
 		//System.out.println(result);
+		for (StudentInEvent e : student.getEvents()) {
+			//System.out.println(e.getEvent().getId());
+		}
 		
-		event = facade.getEventById(4);
-		student = facade.getStudentByMatric("30");
-		System.out.println(facade.getTimetableForStudent("30"));
-		
-		
-		System.out.println(event.toString());
-		System.out.println();
-		System.out.println(student.toString());
-		System.out.println();
-		
-		Event eventOne = facade.getEventById(1);
-		Student studentOne = facade.getStudentByMatric("1");
-		Event eventTwo = facade.getEventById(9);
-		Student studentTwo = facade.getStudentByMatric("11");
-		
-		System.out.println(facade.getTimetableForStudent("1"));
-		System.out.println(facade.getTimetableForStudent("11"));
-		
-		ResponseMove swapResult = facade.swapStudentsBetweenEvents(studentOne, eventOne, studentTwo, eventTwo);
-		
-		System.out.println(swapResult);
-		System.out.println(facade.getTimetableForStudent("1"));
-		System.out.println(facade.getTimetableForStudent("11"));
+		//event = facade.getEventById(4);
+		//student = facade.getStudentByMatric("30");
+		//System.out.println(facade.getTimetableForStudent("30"));
 		
 		
-		Staff staff = facade.getStaffByName("sybill");
-		Event staffEvent = facade.getEventById(1);
-		System.out.println(staff);
+		//System.out.println(event.toString());
+		//System.out.println();
+		//System.out.println(student.toString());
+		//System.out.println();
+		
+		//Event eventOne = facade.getEventById(1);
+		//Student studentOne = facade.getStudentByMatric("1");
+		//Event eventTwo = facade.getEventById(9);
+		//Student studentTwo = facade.getStudentByMatric("11");
+		
+		//System.out.println(facade.getTimetableForStudent("1"));
+		//System.out.println(facade.getTimetableForStudent("11"));
+		
+		//ResponseMove swapResult = facade.swapStudentsBetweenEvents(studentOne, eventOne, studentTwo, eventTwo);
+		
+		//System.out.println(swapResult);
+		//System.out.println(facade.getTimetableForStudent("1"));
+		//System.out.println(facade.getTimetableForStudent("11"));
+		
+		
+		//Staff staff = facade.getStaffByName("sybill");
+		//Event staffEvent = facade.getEventById(1);
+		//System.out.println(staff);
 //		// Returns NO_TIME_AVAILABLE as they are already working in same slot
 //		// In this case Event ID: 12 has the same slot as Event ID: 1
-		ResponseMove canStaffMove = facade.moveStaffToNewEvent(staff, staffEvent);
-		System.out.println(canStaffMove);
+		//ResponseMove canStaffMove = facade.moveStaffToNewEvent(staff, staffEvent);
+		//System.out.println(canStaffMove);
 	}
 }

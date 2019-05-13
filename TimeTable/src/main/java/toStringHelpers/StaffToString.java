@@ -2,7 +2,7 @@ package toStringHelpers;
 
 import java.util.List;
 
-import entities.Staff;
+import ontology.elements.Staff;
 
 public class StaffToString implements ObjectToString
 {

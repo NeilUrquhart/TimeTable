@@ -1,6 +1,6 @@
 package toStringHelpers;
 
-import entities.Programme;
+import ontology.elements.Programme;
 
 public class ProgrammeToString implements ObjectToString
 {

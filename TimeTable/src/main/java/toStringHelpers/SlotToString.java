@@ -1,6 +1,6 @@
 package toStringHelpers;
 
-import entities.TTSlot;
+import ontology.elements.TTSlot;
 
 public class SlotToString implements ObjectToString
 {

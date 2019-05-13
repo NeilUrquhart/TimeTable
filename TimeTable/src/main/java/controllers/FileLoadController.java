@@ -6,8 +6,8 @@ import dao.DataReaderSetting;
 import dao.ProgrammeCsvReader;
 import dao.TimetableData;
 import dao.TimetableExcelDataReader;
-import entities.Module;
-import entities.Programme;
+import ontology.elements.Module;
+import ontology.elements.Programme;
 
 public class FileLoadController
 {

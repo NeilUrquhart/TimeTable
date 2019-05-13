@@ -1,10 +1,10 @@
 package controllers;
 
 import dao.TimetableData;
-import entities.Event;
-import entities.Student;
-import entities.StudentInEvent;
-import entities.TTSlot;
+import ontology.elements.Event;
+import ontology.elements.Student;
+import ontology.elements.StudentInEvent;
+import ontology.elements.TTSlot;
 import returnCodes.ResponseMove;
 import returnCodes.StudentMoveCode;
 

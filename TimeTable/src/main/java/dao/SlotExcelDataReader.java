@@ -13,8 +13,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import dao.parsers.DayOfWeekParser;
 import dao.parsers.TimeParser;
-import entities.DayOfWeek;
-import entities.TTSlot;
+import ontology.elements.DayOfWeek;
+import ontology.elements.TTSlot;
 
 public class SlotExcelDataReader
 {

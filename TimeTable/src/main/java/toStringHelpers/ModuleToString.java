@@ -2,7 +2,7 @@ package toStringHelpers;
 
 import java.util.List;
 
-import entities.Module;
+import ontology.elements.Module;
 
 public class ModuleToString implements ObjectToString
 {

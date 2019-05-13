@@ -6,14 +6,14 @@ import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Row;
 
-import entities.Event;
-import entities.EventType;
-import entities.Module;
-import entities.Room;
-import entities.TTSlot;
-import entities.Staff;
-import entities.Student;
-import entities.StudentInEvent;
+import ontology.elements.Event;
+import ontology.elements.EventType;
+import ontology.elements.Module;
+import ontology.elements.Room;
+import ontology.elements.Staff;
+import ontology.elements.Student;
+import ontology.elements.StudentInEvent;
+import ontology.elements.TTSlot;
 
 public class EventParser
 {

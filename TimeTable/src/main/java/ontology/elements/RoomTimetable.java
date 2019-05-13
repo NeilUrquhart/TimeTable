@@ -1,4 +1,4 @@
-package entities;
+package ontology.elements;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.TimetableData;
-import entities.Event;
-import entities.EventType;
-import entities.Module;
-import entities.Programme;
-import entities.Room;
-import entities.TTSlot;
-import entities.Staff;
-import entities.Student;
+import ontology.elements.Event;
+import ontology.elements.EventType;
+import ontology.elements.Module;
+import ontology.elements.Programme;
+import ontology.elements.Room;
+import ontology.elements.Staff;
+import ontology.elements.Student;
+import ontology.elements.TTSlot;
 
 public class QueryController
 {

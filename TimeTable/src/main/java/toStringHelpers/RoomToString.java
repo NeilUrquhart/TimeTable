@@ -1,6 +1,6 @@
 package toStringHelpers;
 
-import entities.Room;
+import ontology.elements.Room;
 
 public class RoomToString implements ObjectToString
 {

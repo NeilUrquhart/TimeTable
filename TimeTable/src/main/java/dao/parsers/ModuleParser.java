@@ -2,7 +2,7 @@ package dao.parsers;
 
 import org.apache.poi.ss.usermodel.Row;
 
-import entities.Module;
+import ontology.elements.Module;
 
 public class ModuleParser
 {
