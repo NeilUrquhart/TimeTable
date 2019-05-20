@@ -32,6 +32,7 @@ import dao.ProgrammeCsvReader;
 import dao.TimetableData;
 import dao.TimetableExcelDataReader;
 import returnCodes.ResponseMove;
+import personalityHelpers.Evaluator;
 
 public class StudentAgent extends Agent {
 	private Codec codec = new SLCodec();
@@ -39,6 +40,7 @@ public class StudentAgent extends Agent {
 	private AID timeTableAID;
 	private Student studentInfo;
 	private StudentRequest studentRequest = new StudentRequest();
+	private Evaluator evaluation = new Evaluator();
 
 	protected void setup() {
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -61,6 +63,9 @@ public class StudentAgent extends Agent {
 		// 6 for no room available // 7 OK
 		studentRequest.setTargetEvent(7);
 		studentRequest.setStudent(studentInfo.getMatric());
+		// Check if you are in a non-compatible event
+		if (studentInfo.getMatric().equals("4"))
+			evaluation.evaluate(studentInfo.getPersonality(), studentInfo.getEvents());
 
 
 		// Register language and Ontology
@@ -103,6 +108,9 @@ public class StudentAgent extends Agent {
 		}		
 		public void action() {
 			if (studentInfo.getMatric().equals("4")) {
+				System.out.println(studentInfo.getPersonality().getUnnaceptableSlots());
+				System.out.println(studentInfo.getPersonality().getAwkwardSlots());
+				/*
 				// Prepare the REQUEST message
 				ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 				msg.addReceiver(timeTableAID);
@@ -124,7 +132,7 @@ public class StudentAgent extends Agent {
 				catch (OntologyException oe) {
 					oe.printStackTrace();
 				} 
-			}
+			*/}
 		}
 	}
 

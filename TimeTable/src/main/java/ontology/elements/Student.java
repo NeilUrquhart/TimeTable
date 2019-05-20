@@ -11,6 +11,7 @@ public class Student
 	private String matric;
 	private List<StudentInEvent> events;
 	private ObjectToString studentToString;
+	private Personality personality;
 	
 
 	public String getMatric()
@@ -23,13 +24,24 @@ public class Student
 		return events;
 	}
 	
+	public Personality getPersonality()
+	{
+		return personality;
+	}
+	
 	public void setMatric(String matric)
 	{
 		this.matric = matric;
 	}
+	
 	public void setEvents(List<StudentInEvent> events)
 	{
 		this.events = events;
+	}
+	
+	public void setPersonality(Personality personality)
+	{
+		this.personality = personality;
 	}
 	
 	public Student()

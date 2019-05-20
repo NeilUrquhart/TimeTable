@@ -17,6 +17,7 @@ import ontology.elements.StaffTimetable;
 import ontology.elements.Student;
 import ontology.elements.StudentTimetable;
 import ontology.elements.TTSlot;
+import personalityHelpers.PersonalityFactory;
 import controllers.FacadeController;
 import controllers.FileLoadController;
 import controllers.QueryController;
@@ -31,20 +32,27 @@ public class AgentStartUp {
 	public static void main(String[] args) {
 		Profile myProfile = new ProfileImpl();
 		Runtime myRuntime = Runtime.instance();
+		// Create personalities
+		PersonalityFactory personalityFactory = PersonalityFactory.getInstance();
+		personalityFactory.getSize();
 		try{
 			ContainerController myContainer = myRuntime.createMainContainer(myProfile);	
 			AgentController rma = myContainer.createNewAgent("rma", "jade.tools.rma.rma", null);
 			rma.start();
-			
+
 			FacadeController facade = FacadeController.getInstance(""); //loads tt data
 
 			Object[] fc = {facade};
 			AgentController timeTablingAgent = myContainer.createNewAgent("time-table", TimeTablingSystem.class.getCanonicalName(), fc);
 			timeTablingAgent.start();
-			
+
 			AgentController Student;
 			List<Student> students = facade.getAllStudents();
 			for(int i = 0; i < students.size(); i++) {
+				if (students.get(i).getMatric().contentEquals("4"))
+					students.get(i).setPersonality(personalityFactory.getPersonality(1));
+				else
+					students.get(i).setPersonality(personalityFactory.getPersonality());
 				Object[] stud = {students.get(i)}; // To pass in the student info create a student object
 				Student = myContainer.createNewAgent("Student ID: " + students.get(i).getMatric(), StudentAgent.class.getCanonicalName(), stud);
 
