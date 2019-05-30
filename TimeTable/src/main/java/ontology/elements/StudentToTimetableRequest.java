@@ -20,30 +20,38 @@ import dao.TimetableData;
 import dao.TimetableExcelDataReader;
 import returnCodes.ResponseMove;
 
-public class StudentRequest implements AgentAction {
-	// Which Event the Student is leaving
-	private int leaveEvent;
-	// What is the target Event
-	private int targetEvent;
+public class StudentToTimetableRequest implements AgentAction {
+	// Which Slot the Student wishes to leave
+	private int slot;
+	// Which Event the Student is part of
+	private int LeaveEvent;
 	// Which student is asking for the request
 	private String student;
+	// Personality
+	private Personality personality;
 	
 	public int getLeaveEvent() {
-		return leaveEvent;
+		return LeaveEvent;
 	}
-	public void setLeaveEvent(int leaveEvent) {
-		this.leaveEvent = leaveEvent;
+	public void setLeaveEvent(int event) {
+		this.LeaveEvent = event;
 	}
-	public int getTargetEvent() {
-		return targetEvent;
+	public int getSlot() {
+		return slot;
 	}
-	public void setTargetEvent(int targetEvent) {
-		this.targetEvent = targetEvent;
+	public void setSlot(int slot) {
+		this.slot = slot;
 	}
 	public String getStudent() {
 		return student;
 	}
 	public void setStudent(String student) {
 		this.student = student;
+	}
+	public Personality getPersonality() {
+		return personality;
+	}
+	public void setPersonality(Personality personality) {
+		this.personality = personality;
 	}
 }

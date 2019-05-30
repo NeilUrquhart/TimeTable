@@ -54,7 +54,7 @@ public class AgentStartUp {
 				else
 					students.get(i).setPersonality(personalityFactory.getPersonality());
 				Object[] stud = {students.get(i)}; // To pass in the student info create a student object
-				Student = myContainer.createNewAgent("Student ID: " + students.get(i).getMatric(), StudentAgent.class.getCanonicalName(), stud);
+				Student = myContainer.createNewAgent(students.get(i).getMatric(), StudentAgent.class.getCanonicalName(), stud);
 
 				Student.start();
 			}

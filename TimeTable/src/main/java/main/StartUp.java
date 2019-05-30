@@ -51,8 +51,16 @@ public class StartUp
 		ResponseMove result = facade.moveStudentToNewEvent(student, event2, event);
 		
 		//System.out.println(result);
-		for (StudentInEvent e : student.getEvents()) {
-			//System.out.println(e.getEvent().getId());
+		for (Event e : facade.getAllEvents()) {
+			System.out.println(e.getId());
+		}
+		
+		for (int i = 1; i < facade.getAllEvents().size() - 1; i++) {
+			for (int j = i + 1; j < facade.getAllEvents().size(); j++) {
+				if (facade.getEventById(i).getModule().getDescription().equals(facade.getEventById(j).getModule().getDescription())
+						&& facade.getEventById(i).getType().equals(facade.getEventById(i).getType()))
+					System.out.println("hello");
+			}
 		}
 		
 		//event = facade.getEventById(4);
