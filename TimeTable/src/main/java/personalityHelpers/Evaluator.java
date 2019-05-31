@@ -67,11 +67,13 @@ public class Evaluator {
 	
 	public SlotInfo getUnacceptable(){
 		SlotInfo slot = unacceptable.remove(0);
+		slot.setUnacceptable(true);
 		return  slot;
 	}
 
 	public SlotInfo getAwkward() {
 		SlotInfo slot = awkward.remove(0);
+		slot.setUnacceptable(false);
 		return  slot;
 	}
 	
@@ -89,5 +91,13 @@ public class Evaluator {
 
 	public void setAwkward(ArrayList<SlotInfo> awkward) {
 		this.awkward = awkward;
+	}
+
+	public void reAddSlot(SlotInfo currentSlot) {
+		if (currentSlot.isUnacceptable()) {
+			unacceptable.add(currentSlot);
+		} else {
+			awkward.add(currentSlot);
+		}		
 	}
 }

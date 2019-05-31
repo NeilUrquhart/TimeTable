@@ -3,10 +3,11 @@ package ontology.elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import jade.content.Concept;
 import toStringHelpers.EventToString;
 import toStringHelpers.ObjectToString;
 
-public class Event 
+public class Event
 {
 	private int id;
 	private EventType type;

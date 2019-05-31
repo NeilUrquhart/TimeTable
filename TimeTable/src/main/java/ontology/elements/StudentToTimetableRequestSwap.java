@@ -20,32 +20,39 @@ import dao.TimetableData;
 import dao.TimetableExcelDataReader;
 import returnCodes.ResponseMove;
 
-public class TimetableToStudentRequest implements AgentAction {
-	// Which event am I interested
+public class StudentToTimetableRequestSwap implements AgentAction {
+	// Which Slot the Student wishes to leave
 	private int targetEvent;
 	// Which Event the Student is part of
-	private int leaveSlot;
-	// Is the slot unacceptable or just awkward
-	private boolean unacceptable;
-	
-	
-
+	private int LeaveEvent;
+	// Which student is asking for the request
+	private String leaveStudentMatric;
+	// Which student is getting 
+	private String targetStudentMatric;
 	public int getTargetEvent() {
 		return targetEvent;
 	}
 	public void setTargetEvent(int targetEvent) {
 		this.targetEvent = targetEvent;
 	}
-	public int getLeaveSlot() {
-		return leaveSlot;
+	public int getLeaveEvent() {
+		return LeaveEvent;
 	}
-	public void setLeaveSlot(int leaveSlot) {
-		this.leaveSlot = leaveSlot;
+	public void setLeaveEvent(int leaveEvent) {
+		LeaveEvent = leaveEvent;
 	}
-	public boolean isUnacceptable() {
-		return unacceptable;
+	public String getLeaveStudentMatric() {
+		return leaveStudentMatric;
 	}
-	public void setUnacceptable(boolean unacceptable) {
-		this.unacceptable = unacceptable;
+	public void setLeaveStudentMatric(String leaveStudentMatric) {
+		this.leaveStudentMatric = leaveStudentMatric;
 	}
+	public String getTargetStudentMatric() {
+		return targetStudentMatric;
+	}
+	public void setTargetStudentMatric(String targetStudentMatric) {
+		this.targetStudentMatric = targetStudentMatric;
+	}
+	
+	
 }

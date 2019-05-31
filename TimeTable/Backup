@@ -27,10 +27,9 @@ import ontology.elements.Event;
 import ontology.elements.Student;
 import ontology.elements.StudentInEvent;
 import ontology.elements.StudentToTimetableRequest;
-import ontology.elements.StudentToTimetableRequestSwap;
 import ontology.elements.TTSlot;
 import ontology.elements.TimeTableMessage;
-import ontology.elements.StudentToStudentRequest;
+import ontology.elements.TimetableToStudentRequest;
 import returnCodes.ResponseMove;
 
 
@@ -109,20 +108,7 @@ public class TimeTablingSystem extends Agent {
 					ce = getContentManager().extractContent(msg);
 					if (ce instanceof Action) {
 						Action ac = (Action) ce;
-						//This is the request after the consent for a swap has happened
-						if (ac.getAction() instanceof StudentToTimetableRequestSwap) {
-							StudentToTimetableRequestSwap request = (StudentToTimetableRequestSwap) ac.getAction();
-							ResponseMove result = facade.swapStudentsBetweenEvents(facade.getStudentByMatric(request.getLeaveStudentMatric())
-									, facade.getEventById(request.getLeaveEvent()), facade.getStudentByMatric(request.getTargetStudentMatric())
-									, facade.getEventById(request.getTargetEvent()));
-							if (result == ResponseMove.OK)
-								sendResponse(result, "Success", msg, null, null, null);
-							else
-								sendResponse(result, "Failed", msg, null, null, null);
-							System.out.println("SENT SWAP CONFIRMATION BACK");
-						}
-						// This is the standard request
-						else if (ac.getAction() instanceof StudentToTimetableRequest) {
+						if (ac.getAction() instanceof StudentToTimetableRequest) {
 							StudentToTimetableRequest request = (StudentToTimetableRequest) ac.getAction();
 							Student student = facade.getStudentByMatric(request.getStudent());
 							Event LeaveEvent = facade.getEventById(request.getLeaveEvent());
@@ -142,7 +128,7 @@ public class TimeTablingSystem extends Agent {
 								for (Event e : compatibleEventsPrunedFull) {
 									result = facade.moveStudentToNewEvent(student, e, LeaveEvent);
 									if (result == ResponseMove.OK) {
-										sendResponse(result, "Success", msg, null, null, null);
+										sendResponse(result, "Success", msg, null);
 										return;
 									}
 									else if (result == ResponseMove.NO_ROOM_AVAILABLE) {
@@ -157,20 +143,25 @@ public class TimeTablingSystem extends Agent {
 									// Get AIDs
 									for (Event e : noRoomEvents) {
 										for (StudentInEvent s : e.getStudents()) {
-											if (!s.getStudent().getMatric().equals(student.getMatric())) {
-												listOfStudentsToContact.add(studentList.get(s.getStudent().getMatric()));
-												listOfEvents.add(e.getId());
-											}
+											listOfStudentsToContact.add(studentList.get(s.getStudent().getMatric()));
+											listOfEvents.add(e.getId());
 										}
 									}
-									// Send Reply
-									sendResponse(result, "No Room", msg, null, listOfStudentsToContact, listOfEvents);
+									// Send Message to Specific Students
+									boolean unacceptable;
+									if (request.getPersonality().getUnnaceptableSlots().contains(request.getSlot()))
+										unacceptable = true;
+									else
+										unacceptable = false;
+									for (int i = 0; i < listOfStudentsToContact.size(); i++) {
+										sendRequest(listOfStudentsToContact.get(i), request.getSlot(), listOfEvents.get(i), unacceptable);
+									}
 									return;
 								}
 								else {
 									// For some reason it has failed, inform the student
 									// This shouldn't ever trigger but I'll leave it just in case
-									sendResponse(result, "Critically Failed", msg, null, null, null);
+									sendResponse(result, "Critically Failed", msg, null);
 									return;
 								}
 							}
@@ -181,12 +172,12 @@ public class TimeTablingSystem extends Agent {
 								for (Event e : compatibleEventsPrunedUnacceptable) {
 									result = facade.moveStudentToNewEvent(student, e, LeaveEvent);
 									if (result == ResponseMove.OK) {
-										sendResponse(result, "Success Caveat", msg, e, null, null);
+										sendResponse(result, "Success Caveat", msg, e);
 										return;
 									}
 									else {
 										// Inform that the change has failed
-										sendResponse(result, "Failed", msg, null, null, null);
+										sendResponse(result, "Failed", msg, null);
 										return;
 									}
 	
@@ -196,7 +187,7 @@ public class TimeTablingSystem extends Agent {
 							// Otherwise just say that there is no option to switch
 							else {
 								// Inform that the change has failed
-								sendResponse(result, "Failed", msg, null, null, null);
+								sendResponse(result, "Failed", msg, null);
 								return;
 							}
 						}
@@ -233,19 +224,13 @@ public class TimeTablingSystem extends Agent {
 		
 	}
 	
-	private void sendResponse(ResponseMove result, String value, ACLMessage msg, Event caveatEvent, ArrayList<AID> students, ArrayList<Integer> events) {
+	private void sendResponse(ResponseMove result, String value, ACLMessage msg, Event caveatEvent) {
 		// Create response
 		TimeTableMessage ttm = new TimeTableMessage();
 		ttm.setResponse(result);
 		// Only if the student has to move to an event that is awkward for him
 		if (caveatEvent != null) {
 			ttm.setCaveatEvent(caveatEvent);
-		}
-		// Only if there are no rooms available
-		if (students != null && events != null) {
-			// Transform into arrays and send them back
-			ttm.setStudentList(students.toArray());
-			ttm.setTargetEvents(events.toArray());
 		}
 		Result rs = new Result();
 		rs.setAction(ttm);
@@ -258,6 +243,33 @@ public class TimeTablingSystem extends Agent {
 			e.printStackTrace();
 		}
 		send(msg2);
-		System.out.println("Sent message back to student.");
+	}
+	
+	private void sendRequest(AID student, int leaveSlot, int targetEvent, boolean unacceptable) {
+		TimetableToStudentRequest ttsr = new TimetableToStudentRequest();
+		ttsr.setLeaveSlot(leaveSlot);
+		ttsr.setTargetEvent(targetEvent);
+		ttsr.setUnacceptable(unacceptable);
+		ACLMessage msg2 = new ACLMessage(ACLMessage.REQUEST);
+		msg2.addReceiver(student);
+		System.out.println(student);
+		msg2.setLanguage(codec.getName());
+		msg2.setOntology(ontology.getName()); 
+		Action request = new Action();
+		request.setAction(ttsr);
+		request.setActor(student);
+
+		try {
+			// Let JADE convert from Java objects to string
+			getContentManager().fillContent(msg2, request);
+			send(msg2);
+			System.out.println("Sent Message");
+		}
+		catch (CodecException ce) {
+			ce.printStackTrace();
+		}
+		catch (OntologyException oe) {
+			oe.printStackTrace();
+		}
 	}
 }

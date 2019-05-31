@@ -8,6 +8,26 @@ import returnCodes.ResponseMove;
 public class TimeTableMessage implements AgentAction {
 	ResponseMove response;
 	Event caveatEvent;
+	Object[] studentList;
+	Object[] targetEvents; 
+
+	
+
+	public Object[] getStudentList() {
+		return studentList;
+	}
+
+	public void setStudentList(Object[] studentList) {
+		this.studentList = studentList;
+	}
+
+	public Object[] getTargetEvents() {
+		return targetEvents;
+	}
+
+	public void setTargetEvents(Object[] targetEvents) {
+		this.targetEvents = targetEvents;
+	}
 
 	public Event getCaveatEvent() {
 		return caveatEvent;
