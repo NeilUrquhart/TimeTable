@@ -1,4 +1,8 @@
 package main;
+/*
+ * This is a test comment.
+ * 
+ */
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
