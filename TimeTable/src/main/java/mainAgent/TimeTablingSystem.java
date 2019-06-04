@@ -39,6 +39,7 @@ public class TimeTablingSystem extends Agent {
 	private Ontology ontology = TimeTableOntology.getInstance();
 	private FacadeController facade;
 	private HashMap<String, AID> studentList = new HashMap<String, AID>();
+	private boolean verbose = true;
 
 	protected void setup() {
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -80,8 +81,7 @@ public class TimeTablingSystem extends Agent {
 			try{
 				DFAgentDescription[] agentsType1  = DFService.search(myAgent,template); 
 				for (DFAgentDescription agent : agentsType1) {
-					int index = agent.getName().getName().indexOf('@');
-					studentList.put(agent.getName().getName().substring(0, index), agent.getName());
+					studentList.put(agent.getName().getLocalName(), agent.getName());
 				}
 			}
 			catch(FIPAException e) {
@@ -115,18 +115,31 @@ public class TimeTablingSystem extends Agent {
 							ResponseMove result = facade.swapStudentsBetweenEvents(facade.getStudentByMatric(request.getLeaveStudentMatric())
 									, facade.getEventById(request.getLeaveEvent()), facade.getStudentByMatric(request.getTargetStudentMatric())
 									, facade.getEventById(request.getTargetEvent()));
-							if (result == ResponseMove.OK)
-								sendResponse(result, "Success", msg, null, null, null);
-							else
-								sendResponse(result, "Failed", msg, null, null, null);
-							System.out.println("SENT SWAP CONFIRMATION BACK");
+							if (result == ResponseMove.OK) {
+								
+								sendResponse(result, "Success Swap", msg, request.getLeaveEvent(), null, null, studentList.get(request.getTargetStudentMatric()), 
+										request.getLeaveEvent());
+								if (verbose) {
+									System.out.println("Timetable successfully swapped student " + 
+											msg.getSender().getLocalName() + 
+											" with student " + request.getTargetStudentMatric());
+								}
+							}
+							else {
+								sendResponse(result, "Failed Swap", msg, null, null, null, null, null);
+								if (verbose) {
+									System.out.println("Timetable unsuccessfully swapped student " + 
+											msg.getSender().getLocalName() + 
+											" with student " + request.getTargetStudentMatric() + " because of " + result);
+								}
+							}
 						}
 						// This is the standard request
 						else if (ac.getAction() instanceof StudentToTimetableRequest) {
 							StudentToTimetableRequest request = (StudentToTimetableRequest) ac.getAction();
 							Student student = facade.getStudentByMatric(request.getStudent());
 							Event LeaveEvent = facade.getEventById(request.getLeaveEvent());
-							ArrayList<Event> compatibleEvents = facade.getCompatibleEvents(LeaveEvent);
+							ArrayList<Event> compatibleEvents = facade.getCompatibleEvents(LeaveEvent, student.getEvents());
 							ArrayList<Event> compatibleEventsPrunedUnacceptable = pruneEvent(compatibleEvents, request.getPersonality().getUnnaceptableSlots());
 							ArrayList<Event> compatibleEventsPrunedFull = pruneEvent(compatibleEventsPrunedUnacceptable, request.getPersonality().getAwkwardSlots());
 							// This list is if all the potential rooms are full and list of events has to be sent back to the student
@@ -142,7 +155,10 @@ public class TimeTablingSystem extends Agent {
 								for (Event e : compatibleEventsPrunedFull) {
 									result = facade.moveStudentToNewEvent(student, e, LeaveEvent);
 									if (result == ResponseMove.OK) {
-										sendResponse(result, "Success", msg, null, null, null);
+										sendResponse(result, "Success", msg, null, null, null, null, null);
+										if (verbose)
+											System.out.println("Moved Student " + msg.getSender().getLocalName() +
+													" from event " + LeaveEvent.getId() + " to event " + e.getId());
 										return;
 									}
 									else if (result == ResponseMove.NO_ROOM_AVAILABLE) {
@@ -164,13 +180,13 @@ public class TimeTablingSystem extends Agent {
 										}
 									}
 									// Send Reply
-									sendResponse(result, "No Room", msg, null, listOfStudentsToContact, listOfEvents);
+									sendResponse(result, "No Room", msg, null, listOfStudentsToContact, listOfEvents, null, null);
 									return;
 								}
 								else {
 									// For some reason it has failed, inform the student
 									// This shouldn't ever trigger but I'll leave it just in case
-									sendResponse(result, "Critically Failed", msg, null, null, null);
+									sendResponse(result, "Critically Failed", msg, null, null, null, null, null);
 									return;
 								}
 							}
@@ -181,12 +197,12 @@ public class TimeTablingSystem extends Agent {
 								for (Event e : compatibleEventsPrunedUnacceptable) {
 									result = facade.moveStudentToNewEvent(student, e, LeaveEvent);
 									if (result == ResponseMove.OK) {
-										sendResponse(result, "Success Caveat", msg, e, null, null);
+										sendResponse(result, "Success Caveat", msg, e.getId(), null, null, null, null);
 										return;
 									}
 									else {
 										// Inform that the change has failed
-										sendResponse(result, "Failed", msg, null, null, null);
+										sendResponse(result, "Failed", msg, null, null, null, null, null);
 										return;
 									}
 	
@@ -196,7 +212,7 @@ public class TimeTablingSystem extends Agent {
 							// Otherwise just say that there is no option to switch
 							else {
 								// Inform that the change has failed
-								sendResponse(result, "Failed", msg, null, null, null);
+								sendResponse(result, "Failed", msg, null, null, null, null, null);
 								return;
 							}
 						}
@@ -233,7 +249,7 @@ public class TimeTablingSystem extends Agent {
 		
 	}
 	
-	private void sendResponse(ResponseMove result, String value, ACLMessage msg, Event caveatEvent, ArrayList<AID> students, ArrayList<Integer> events) {
+	private void sendResponse(ResponseMove result, String value, ACLMessage msg, Integer caveatEvent, ArrayList<AID> students, ArrayList<Integer> events, AID targetStudent, Integer leaveEvent) {
 		// Create response
 		TimeTableMessage ttm = new TimeTableMessage();
 		ttm.setResponse(result);
@@ -247,17 +263,23 @@ public class TimeTablingSystem extends Agent {
 			ttm.setStudentList(students.toArray());
 			ttm.setTargetEvents(events.toArray());
 		}
+		ACLMessage msg2 = msg.createReply();
+		if (targetStudent != null) {
+			ttm.setTargetStudent(targetStudent);
+			msg2.addReceiver(targetStudent);
+		}
+		if (leaveEvent != null) {
+			ttm.setLeaveEvent(leaveEvent);
+		}
+		msg2.setPerformative(ACLMessage.INFORM);
 		Result rs = new Result();
 		rs.setAction(ttm);
 		rs.setValue(value);
-		ACLMessage msg2 = msg.createReply();
-		msg2.setPerformative(ACLMessage.INFORM);
 		try {
 			getContentManager().fillContent(msg2, rs);
 		} catch (CodecException | OntologyException e) {
 			e.printStackTrace();
 		}
 		send(msg2);
-		System.out.println("Sent message back to student.");
 	}
 }

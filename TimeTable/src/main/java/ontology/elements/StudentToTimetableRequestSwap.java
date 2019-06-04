@@ -29,6 +29,7 @@ public class StudentToTimetableRequestSwap implements AgentAction {
 	private String leaveStudentMatric;
 	// Which student is getting 
 	private String targetStudentMatric;
+	
 	public int getTargetEvent() {
 		return targetEvent;
 	}

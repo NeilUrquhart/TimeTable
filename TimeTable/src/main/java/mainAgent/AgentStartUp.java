@@ -49,13 +49,9 @@ public class AgentStartUp {
 			AgentController Student;
 			List<Student> students = facade.getAllStudents();
 			for(int i = 0; i < students.size(); i++) {
-				if (students.get(i).getMatric().contentEquals("4"))
-					students.get(i).setPersonality(personalityFactory.getPersonality(1));
-				else
-					students.get(i).setPersonality(personalityFactory.getPersonality());
-				Object[] stud = {students.get(i)}; // To pass in the student info create a student object
+				students.get(i).setPersonality(personalityFactory.getPersonality(i));
+				Object[] stud = {students.get(i), facade.getAllEvents()}; // To pass in the student info create a student object
 				Student = myContainer.createNewAgent(students.get(i).getMatric(), StudentAgent.class.getCanonicalName(), stud);
-
 				Student.start();
 			}
 		}

@@ -29,18 +29,19 @@ public class Evaluator {
 			return false;
 	}
 
-	public void evaluate(Personality p, List<StudentInEvent> events) {
+	public void evaluate(Personality p, List<StudentInEvent> events, boolean verbose, String matric) {
 
 		unacceptable.clear();
 		awkward.clear();
-
-		System.out.println("Timetable evaluation");
+		if (verbose)
+			System.out.println("Student " + matric + " is evaluating his/her timetable.");
 		//Check for unacceptable slots
 		for (int slot : p.getUnnaceptableSlots()) {
 			for (StudentInEvent e : events) {
 				for (TTSlot ttslot : e.getEvent().getSlots())
 				if (slot  == ttslot.getId()) {
-					System.out.println("Unacceptable slot int use - slot "+slot);
+					if (verbose)
+						System.out.println("Unacceptable slot in use - slot " + slot + " for student " + matric);
 					SlotInfo sl = new SlotInfo();
 					sl.setSlotID(slot);
 					sl.setEvent(e.getEvent());
@@ -53,7 +54,8 @@ public class Evaluator {
 			for (StudentInEvent e : events) {
 				for (TTSlot ttslot : e.getEvent().getSlots()) {
 					if (slot  == ttslot.getId()  && !unacceptable.contains(slot)) {
-						System.out.println("Awkward slot int use - slot "+slot);
+						if (verbose)
+							System.out.println("Awkward slot in use - slot " + slot + " for student " + matric);
 						SlotInfo sl = new SlotInfo();
 						sl.setSlotID(slot);
 						sl.setEvent(e.getEvent());
@@ -93,11 +95,35 @@ public class Evaluator {
 		this.awkward = awkward;
 	}
 
-	public void reAddSlot(SlotInfo currentSlot) {
-		if (currentSlot.isUnacceptable()) {
+	public void reAddSlot(SlotInfo currentSlot, boolean dontReAdd) {
+		if (dontReAdd) {
+			dontReAdd = false;
+		}
+		else if (currentSlot.isUnacceptable()) {
 			unacceptable.add(currentSlot);
 		} else {
 			awkward.add(currentSlot);
 		}		
+	}
+	
+	public ArrayList<SlotInfo> getFullList() {
+		ArrayList<SlotInfo> temp = unacceptable;
+		temp.addAll(awkward);
+		return temp;
+	}
+
+	public void removeSlotInfo(SlotInfo si) {
+		for (int i = 0; i < unacceptable.size(); i++) {
+			if (unacceptable.get(i).getSlotID() == si.getSlotID() && unacceptable.get(i).getEvent().getId() == si.getEvent().getId()) {
+				unacceptable.remove(i);
+			}
+		}
+		
+		for (int i = 0; i < awkward.size(); i++) {
+			if (awkward.get(i).getSlotID() == si.getSlotID() && awkward.get(i).getEvent().getId() == si.getEvent().getId()) {
+				awkward.remove(i);
+			}
+		}
+		
 	}
 }

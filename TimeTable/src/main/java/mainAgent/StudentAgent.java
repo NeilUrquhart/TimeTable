@@ -42,7 +42,10 @@ import ontology.TimeTableOntology;
 import ontology.elements.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.List;
 
 import controllers.FacadeController;
 import controllers.FileLoadController;
@@ -66,6 +69,10 @@ public class StudentAgent extends Agent {
 	private int noOfExpectedResponses;
 	private int noOfResponses;
 	private ArrayList<StudentToStudentRequest> consentingStudentList;
+	private List<Event> allEvents;
+	private boolean verbose = true;
+	private int inc = 0;
+	private boolean dontReAdd = false;
 
 	protected void setup() {
 
@@ -84,11 +91,11 @@ public class StudentAgent extends Agent {
 
 		// Find out who you are
 		studentInfo = (Student) getArguments()[0];
+		allEvents = (List<Event>) getArguments()[1];
 		studentRequest.setStudent(studentInfo.getMatric());
 		studentRequest.setPersonality(studentInfo.getPersonality());
 		// Check if you are in a non-compatible event
-		// if (studentInfo.getMatric().equals("4"))
-		evaluation.evaluate(studentInfo.getPersonality(), studentInfo.getEvents());
+		evaluation.evaluate(studentInfo.getPersonality(), studentInfo.getEvents(), verbose, studentInfo.getMatric());
 
 
 		// Register language and Ontology
@@ -132,42 +139,45 @@ public class StudentAgent extends Agent {
 			super(a);
 		}		
 		public void action() {
-			// if (studentInfo.getMatric().equals("4")) {
-				if (!processingSlot && (evaluation.hasUnnacceptable() || evaluation.hasAwkard())) {
-					// Grab a slot
-					if (evaluation.hasUnnacceptable()) {
-						currentSlot = evaluation.getUnacceptable();
-					} else {
-						currentSlot = evaluation.getAwkward();
-					}
-					// We are now in the process of changing a slot
-					processingSlot = true;
-					// Prepare the REQUEST message
-					studentRequest.setLeaveEvent(currentSlot.getEvent().getId());
-					studentRequest.setSlot(currentSlot.getSlotID());
-					ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-					msg.addReceiver(timeTableAID);
-					msg.setLanguage(codec.getName());
-					msg.setOntology(ontology.getName()); 
-					Action request = new Action();
-					request.setAction(studentRequest);
-					request.setActor(timeTableAID);
-
-					try {
-						// Let JADE convert from Java objects to string
-						getContentManager().fillContent(msg, request);
-						send(msg);
-						System.out.println("Sent a message to the Time Tabling System.");
-					}
-					catch (CodecException ce) {
-						ce.printStackTrace();
-					}
-					catch (OntologyException oe) {
-						oe.printStackTrace();
-					} 
+			if (!processingSlot && (evaluation.hasUnnacceptable() || evaluation.hasAwkard())) {
+				if (verbose) {
+					int sum = evaluation.getAwkwardList().size() + evaluation.getUnacceptableList().size(); 
+					System.out.println("Student " + studentInfo.getMatric() + " still has " + sum + " slot(s) to take care of.");
 				}
+				// Grab a slot
+				if (evaluation.hasUnnacceptable()) {
+					currentSlot = evaluation.getUnacceptable();
+				} else {
+					currentSlot = evaluation.getAwkward();
+				}
+				// We are now in the process of changing a slot
+				processingSlot = true;
+				// Prepare the REQUEST message
+				studentRequest.setLeaveEvent(currentSlot.getEvent().getId());
+				studentRequest.setSlot(currentSlot.getSlotID());
+				ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+				msg.addReceiver(timeTableAID);
+				msg.setLanguage(codec.getName());
+				msg.setOntology(ontology.getName()); 
+				Action request = new Action();
+				request.setAction(studentRequest);
+				request.setActor(timeTableAID);
 
-			//}
+				try {
+					// Let JADE convert from Java objects to string
+					getContentManager().fillContent(msg, request);
+					send(msg);
+					if (verbose)
+						System.out.println("Student " + studentInfo.getMatric() + " sent a message to the Time Tabling System.");
+				}
+				catch (CodecException ce) {
+					ce.printStackTrace();
+				}
+				catch (OntologyException oe) {
+					oe.printStackTrace();
+				} 
+			}
+
 		}
 		@Override
 		public boolean done() {
@@ -199,6 +209,40 @@ public class StudentAgent extends Agent {
 						// Moved to new event, remove slot/event from personal list
 						if (status.equals("Success")) {
 							processingSlot = false;
+							if (verbose)
+								System.out.println("Student " + studentInfo.getMatric() + " has succesfully dealt with the following slot " + currentSlot.getSlotID());
+							return;
+						}
+						else if  (status.equals("Success Swap")) {
+							processingSlot = false;
+							System.out.println(message.getTargetStudent());
+							if (message.getTargetStudent().getName().equals(getAID().getName())) {
+								// Check if the student has to add an awkward slot
+								Event caveatEvent = getEventByID(message.getCaveatEvent());
+								for (TTSlot slot : caveatEvent.getSlots())
+									if (studentInfo.getPersonality().getAwkwardSlots().contains(slot.getId())) {
+										evaluation.reAddSlot(new SlotInfo(slot.getId(), caveatEvent, false), dontReAdd);
+										if (verbose) {
+											System.out.println("Student " + studentInfo.getMatric() + " was moved to another awkward slot.");
+										}
+									}
+
+								// Check if the student was moved away from an awkward/unacceptable slot
+								for (SlotInfo si : evaluation.getFullList()) {
+									if (si.getEvent().getId() == message.getLeaveEvent()) {
+										evaluation.removeSlotInfo(si);
+										if (verbose) {
+											System.out.println("Student " + studentInfo.getMatric() + " was moved to another awkward slot.");
+										}
+									}
+								}
+
+								// Check if the student is currently evaluating the slot he has been moved from
+								if (currentSlot != null)
+									if (message.getCaveatEvent() == currentSlot.getEvent().getId())
+										dontReAdd = true;
+							}
+							return;
 						}
 						else if (status.equals("No Room")) {
 							// Grab the elements
@@ -210,7 +254,7 @@ public class StudentAgent extends Agent {
 							noOfResponses = 0;
 							if (consentingStudentList == null)
 								consentingStudentList = new ArrayList<StudentToStudentRequest>();
-							else
+							else 
 								consentingStudentList.clear();
 							// Send a message to each of the 
 							for (int i = 0; i < studentList.size(); i++) {
@@ -227,8 +271,16 @@ public class StudentAgent extends Agent {
 								request.setActor(studentList.get(i));
 								getContentManager().fillContent(msg2, request);
 								send(msg2);
-								System.out.println("Sent a message to the Student with proposal to " + studentList.get(i).getName());
+								if (verbose) {
+									int index = studentList.get(i).getName().indexOf('@');
+									System.out.println("Student " + studentInfo.getMatric() + " sent a message to the Student with proposal to " + studentList.get(i).getName().substring(0,  index));
+								}
+
 							}
+						}
+						else {
+							evaluation.reAddSlot(currentSlot, dontReAdd);
+							processingSlot = false;
 						}
 					}
 				}
@@ -281,7 +333,12 @@ public class StudentAgent extends Agent {
 							boolean unacceptableForOther = message.isUnacceptable();
 							int slot = message.getLeaveSlot();
 							utility = calculateUtility(slot, unacceptableForOther, targetEvent);
-							System.out.println("I have utility of: " + utility);
+							if (verbose) {
+								int index = msg.getSender().getName().indexOf('@');								
+								System.out.println("Student " + studentInfo.getMatric() +
+										" has received and calculated event swap utility from Student " + msg.getSender().getName().substring(0, index) +
+										" which is: " + utility);
+							}
 							if (utility >= 0)
 							{
 								// Consent to the swap
@@ -298,7 +355,11 @@ public class StudentAgent extends Agent {
 									e.printStackTrace();
 								}
 								send(msg2);
-								System.out.println("Consented to swap");
+								if (verbose) {
+									int index = msg.getSender().getName().indexOf('@');								
+									System.out.println("Student " + studentInfo.getMatric() +
+											" consented to event swap from Student " + msg.getSender().getName().substring(0, index));
+								}
 							}
 							else
 							{
@@ -314,7 +375,11 @@ public class StudentAgent extends Agent {
 									e.printStackTrace();
 								}
 								send(msg2);
-								System.out.println("Didn't consent to swap");
+								if (verbose) {
+									int index = msg.getSender().getName().indexOf('@');								
+									System.out.println("Student " + studentInfo.getMatric() +
+											" didn't consent to event swap from Student " + msg.getSender().getName().substring(0, index));
+								}
 							}
 						}
 					}
@@ -364,19 +429,25 @@ public class StudentAgent extends Agent {
 							StudentToStudentRequest message = (StudentToStudentRequest) rs.getAction();
 							if (rs.getValue().equals("Consent")) {
 								// Add to list of responses
-								consentingStudentList.add(message);
-								
+								consentingStudentList.add(message);								
 							}
 							noOfResponses++;
 							// If you have received all responses then message the timetabling for the swap
 							if (noOfResponses == noOfExpectedResponses) {
 								if (consentingStudentList.size() == 0) {
-									// evaluation.reAddSlot(currentSlot);
+									evaluation.reAddSlot(currentSlot, dontReAdd);
 									processingSlot = false;
 									return;
 								}
 								else {
 									// Sort the list and pick the one with the highest utility
+									Collections.sort(consentingStudentList, new Comparator<StudentToStudentRequest>() {
+										public int compare(StudentToStudentRequest c1, StudentToStudentRequest c2) {
+											if (c1.getUtility() > c2.getUtility()) return -1;
+											if (c1.getUtility() < c2.getUtility()) return 1;
+											return 0;
+										}});
+									System.out.println(consentingStudentList);
 									StudentToStudentRequest bestStudent = consentingStudentList.get(0);
 									for (StudentToStudentRequest nextStudent : consentingStudentList) {
 										if (nextStudent.getUtility() > bestStudent.getUtility())
@@ -385,9 +456,9 @@ public class StudentAgent extends Agent {
 									// Send message to timetabling system demanding a swap
 									StudentToTimetableRequestSwap stsrs = new StudentToTimetableRequestSwap();
 									stsrs.setLeaveEvent(currentSlot.getEvent().getId());
-									stsrs.setTargetEvent(message.getTargetEvent());
+									stsrs.setTargetEvent(bestStudent.getTargetEvent());
 									stsrs.setLeaveStudentMatric(studentInfo.getMatric());
-									stsrs.setTargetStudentMatric(message.getConsentingStudentMatric());
+									stsrs.setTargetStudentMatric(bestStudent.getConsentingStudentMatric());
 									ACLMessage msg2 = new ACLMessage(ACLMessage.REQUEST);
 									msg2.addReceiver(timeTableAID);
 									msg2.setLanguage(codec.getName());
@@ -397,7 +468,8 @@ public class StudentAgent extends Agent {
 									request.setActor(timeTableAID);
 									getContentManager().fillContent(msg2, request);
 									send(msg2);
-									System.out.println("Sent a swap request to the Timetabling System.");
+									if (verbose)
+										System.out.println("Student " + studentInfo.getMatric() + " sent a swap request to the Timetabling System.");
 								}
 							}
 						}
@@ -425,9 +497,9 @@ public class StudentAgent extends Agent {
 	}
 
 	private Event getEventByID(int id) {
-		for (StudentInEvent e : studentInfo.getEvents()) {
-			if (e.getEvent().getId() == id)
-				return e.getEvent();
+		for (Event e : allEvents) {
+			if (e.getId() == id)
+				return e;
 		}
 		return null;
 	}

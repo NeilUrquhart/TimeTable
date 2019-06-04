@@ -27,12 +27,16 @@ public class StudentMoveController
 		data = new TimetableData();
 	}
 	
-	public ResponseMove canStudentMoveToEvent(Student student, Event event)
+	public ResponseMove canStudentMoveToEvent(Student student, Event event, boolean swapEvent)
 	{
 		if(!canStudentMove(student, event))
 			return ResponseMove.NO_ROOM_AVAILABLE;
 		
-		if(event.getStudents().size() < event.getRoom().getCapacity())
+		int increaseCapacity = 0;
+		if (swapEvent)
+			increaseCapacity = 1;
+		
+		if(event.getStudents().size() < event.getRoom().getCapacity() + increaseCapacity)
 			return ResponseMove.OK;
 		
 		return ResponseMove.NO_ROOM_AVAILABLE;

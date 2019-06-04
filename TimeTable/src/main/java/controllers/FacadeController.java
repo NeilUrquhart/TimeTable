@@ -167,8 +167,8 @@ public class FacadeController
 	{
 		StudentMoveCode result = StudentMoveCode.NO_MOVE;
 		studentMove.setTimetableData(data);
-		ResponseMove resultOne = studentMove.canStudentMoveToEvent(studentOne, eventTwo);
-		ResponseMove resultTwo = studentMove.canStudentMoveToEvent(studentTwo, eventOne);
+		ResponseMove resultOne = studentMove.canStudentMoveToEvent(studentOne, eventTwo, true);
+		ResponseMove resultTwo = studentMove.canStudentMoveToEvent(studentTwo, eventOne, true);
 		if(resultOne == ResponseMove.OK && resultTwo == ResponseMove.OK)
 		{
 			result = studentMove.swapStudents(studentOne, eventOne, studentTwo, eventTwo);
@@ -203,7 +203,7 @@ public class FacadeController
 
 
 		createNewStudentMoveController();
-		ResponseMove canStudentMove = studentMove.canStudentMoveToEvent(student, event);
+		ResponseMove canStudentMove = studentMove.canStudentMoveToEvent(student, event, false);
 		if(canStudentMove != ResponseMove.OK)
 		{
 			return canStudentMove;
@@ -219,8 +219,8 @@ public class FacadeController
 	public ResponseMove swapStudentsBetweenEvents(Student studentOne, Event eventOne, Student studentTwo, Event eventTwo)
 	{
 		createNewStudentMoveController();
-		ResponseMove studentOneResult = studentMove.canStudentMoveToEvent(studentOne, eventTwo);
-		ResponseMove studentTwoResult = studentMove.canStudentMoveToEvent(studentTwo, eventOne);
+		ResponseMove studentOneResult = studentMove.canStudentMoveToEvent(studentOne, eventTwo, true);
+		ResponseMove studentTwoResult = studentMove.canStudentMoveToEvent(studentTwo, eventOne, true);
 		if(studentOneResult != ResponseMove.OK && studentTwoResult != ResponseMove.OK)
 		{
 			return ResponseMove.NO_ROOM_AVAILABLE;
@@ -257,12 +257,23 @@ public class FacadeController
 		studentMove.setTimetableData(data);
 	}
 
-	public ArrayList<Event> getCompatibleEvents(Event event) {
+	public ArrayList<Event> getCompatibleEvents(Event event, List<StudentInEvent> studentEvents) {
 		queryController = new QueryController(data);
 		ArrayList<Event> compatibleEvents = new ArrayList<>();
 		for (Event e : queryController.getAllEvents()) {
-			if  (event.getModule().getName().equals(e.getModule().getName()) && event.getType().equals(e.getType()))
-				compatibleEvents.add(e);
+			if  (event.getModule().getDescription().equals(e.getModule().getDescription()) && event.getType() == e.getType() &&
+					event.getId() != e.getId()) {
+				// Now check if the student already doesn't have that event
+				boolean addEvent = true;
+				for (StudentInEvent sie : studentEvents) {
+					if (sie.getEvent().getId() == e.getId())
+						addEvent = false;
+						
+				}
+				if (addEvent)
+					compatibleEvents.add(e);
+				
+			}
 		}
 		return compatibleEvents;
 	}

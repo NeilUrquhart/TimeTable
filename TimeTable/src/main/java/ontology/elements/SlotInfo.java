@@ -5,6 +5,14 @@ public class SlotInfo {
 	private Event event;
 	private boolean unacceptable;
 	
+	public SlotInfo() { }
+	
+	public SlotInfo(Integer slotID, Event event, boolean unacceptable) {
+		this.slotID = slotID;
+		this.event = event;
+		this.unacceptable = unacceptable;
+	}
+	
 	public boolean isUnacceptable() {
 		return unacceptable;
 	}

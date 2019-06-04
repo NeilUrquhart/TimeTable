@@ -39,7 +39,7 @@ public class PersonalityFactory {
 		try {
 
 			//br = new BufferedReader(new FileReader(FILENAME));
-			fr = new FileReader("survey.csv");
+			fr = new FileReader("target/classes/survey.csv");
 			br = new BufferedReader(fr);
 
 			String sCurrentLine;
@@ -100,7 +100,7 @@ public class PersonalityFactory {
 	private static void getUnacceptable(Personality p, String slot) {
 		try {
 			int nSlot = Integer.parseInt(slot);
-			nSlot--;//Questionaire starts from 1, this programme starts from 0
+			// nSlot--;//Questionaire starts from 1, this programme starts from 0
 			
 			if (nSlot>44)
 				System.out.println("Invalid slot");
