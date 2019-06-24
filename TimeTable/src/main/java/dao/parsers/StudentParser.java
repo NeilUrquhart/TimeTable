@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Row;
 
-import entities.Student;
+import ontology.elements.Student;
 
 public class StudentParser
 {

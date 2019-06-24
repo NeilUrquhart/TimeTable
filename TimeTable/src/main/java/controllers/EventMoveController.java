@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.TimetableData;
-import entities.Event;
-import entities.Room;
-import entities.TTSlot;
+import ontology.elements.Event;
+import ontology.elements.Room;
+import ontology.elements.TTSlot;
 import returnCodes.ResponseMove;
 
 public class EventMoveController

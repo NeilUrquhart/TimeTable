@@ -1,9 +1,15 @@
 package main;
+/*
+ * This is a test comment.
+ * 
+ */
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 import controllers.FacadeController;
@@ -13,17 +19,18 @@ import dao.DataReaderSetting;
 import dao.ProgrammeCsvReader;
 import dao.TimetableData;
 import dao.TimetableExcelDataReader;
-import entities.Event;
-import entities.EventType;
-import entities.Module;
-import entities.Programme;
-import entities.Room;
-import entities.TTSlot;
+import ontology.elements.Event;
+import ontology.elements.EventType;
+import ontology.elements.Module;
+import ontology.elements.Programme;
+import ontology.elements.Room;
+import ontology.elements.Staff;
+import ontology.elements.StaffTimetable;
+import ontology.elements.Student;
+import ontology.elements.StudentInEvent;
+import ontology.elements.StudentTimetable;
+import ontology.elements.TTSlot;
 import returnCodes.ResponseMove;
-import entities.Staff;
-import entities.StaffTimetable;
-import entities.Student;
-import entities.StudentTimetable;
 
 @SuppressWarnings("unused")
 public class StartUp
@@ -31,67 +38,29 @@ public class StartUp
 	public static void main(String[] args)
 	{		
 		// Actual file path will access the given file
-		String liveFilePath = "H:\\docs\\TimeTables\\BigTimetableData.xlsx";
+		String liveFilePath = "C:\\Users\\Michal Lange\\Documents\\TimeTable\\TimeTable\\src\\main\\resources\\rooms.xlxs";
 		
 		// blank file path will access the the test mode with built in data set
 		String testFilePath = "";
 		
-		FacadeController facade = FacadeController.getInstance(testFilePath); //loads tt data
+		FacadeController facade = FacadeController.getInstance(""); //loads tt data
 		
-		List<Event> events = facade.getAllEvents();
-		for(Event event : events)
-		{
-			System.out.println(event.toString());
+		Student s1 = facade.getStudentByMatric("30");
+		Student s2 = facade.getStudentByMatric("31");
+		
+		Event e1 = facade.getEventById(16);
+		Event e2 = facade.getEventById(17);
+		
+		for (TTSlot slot : e1.getSlots()) {
+			System.out.println(slot.getId());
 		}
 		
-		List<Student> students = facade.getAllStudents();
-		for(Student student : students)
-		{
-			System.out.println(student.toString());
+		for (StudentInEvent e : s1.getEvents()) {
+			System.out.println(e.getEvent().getModule());
 		}
 		
-		Event event = facade.getEventById(4);
-		Student student = facade.getStudentByMatric("30");
-
-		System.out.println(event.toString());
-		System.out.println();
-		System.out.println(student.toString());
-		System.out.println();
-
-		//ResponseMove result = facade.moveStudentToNewEvent(student, event);
-		//System.out.println(result);
-		
-		event = facade.getEventById(4);
-		student = facade.getStudentByMatric("30");
-		System.out.println(facade.getTimetableForStudent("30"));
-		
-		
-		System.out.println(event.toString());
-		System.out.println();
-		System.out.println(student.toString());
-		System.out.println();
-		
-		Event eventOne = facade.getEventById(1);
-		Student studentOne = facade.getStudentByMatric("1");
-		Event eventTwo = facade.getEventById(9);
-		Student studentTwo = facade.getStudentByMatric("11");
-		
-		System.out.println(facade.getTimetableForStudent("1"));
-		System.out.println(facade.getTimetableForStudent("11"));
-		
-		ResponseMove swapResult = facade.swapStudentsBetweenEvents(studentOne, eventOne, studentTwo, eventTwo);
-		
-		System.out.println(swapResult);
-		System.out.println(facade.getTimetableForStudent("1"));
-		System.out.println(facade.getTimetableForStudent("11"));
-		
-		
-		Staff staff = facade.getStaffByName("sybill");
-		Event staffEvent = facade.getEventById(1);
-		System.out.println(staff);
-//		// Returns NO_TIME_AVAILABLE as they are already working in same slot
-//		// In this case Event ID: 12 has the same slot as Event ID: 1
-		ResponseMove canStaffMove = facade.moveStaffToNewEvent(staff, staffEvent);
-		System.out.println(canStaffMove);
+		for (StudentInEvent e : s2.getEvents()) {
+			System.out.println(e.getEvent().getModule());
+		}
 	}
 }

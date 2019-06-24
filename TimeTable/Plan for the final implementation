@@ -1,0 +1,24 @@
+1). Find if you are in a non-compatible slots and add it to a list of slots
+2). Message the timetable system asking to be moved from a slot along with personality list of unacceptable slots
+3). The timetable system responds by saying the following:
+	a). I've moved to a slot you like
+	b). I couldn't move you because the class is full - here is a list of students to negotiate with
+	c). I couldn't move because there are no other options or there is no option compatible with your personality
+	
+4). In case of b) message the other students with the personality and leaving event.
+5). The target students only swap if the event is of lower rank
+Example of ranking
+Formula for student receiveing an offer:
+CurrentEvent(Awkward) = +1
+CurrentEvent(Unacceptable)  = +2
+CurrentEvent(Neutral) = 0
+IncomingEvent(Awkward) = -1
+IncomingEvent(Unacceptable) = -2
+IncomingEvent(Neutral) = 0
+IncomingEvent(AwkwardForOtherStudent) = 0
+IncomingEvent(UnacceptableForOtherStudent) = +1
+
+CurrentEvent + IncomingEvent + IncomingEventForOtherStudent >= 0
+Accept
+
+

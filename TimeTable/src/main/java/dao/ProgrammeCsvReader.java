@@ -7,8 +7,8 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import entities.Module;
-import entities.Programme;
+import ontology.elements.Module;
+import ontology.elements.Programme;
 
 public class ProgrammeCsvReader
 {

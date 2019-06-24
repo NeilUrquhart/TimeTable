@@ -1,9 +1,9 @@
 package controllers;
 
 import dao.TimetableData;
-import entities.Event;
-import entities.Staff;
-import entities.TTSlot;
+import ontology.elements.Event;
+import ontology.elements.Staff;
+import ontology.elements.TTSlot;
 import returnCodes.ResponseMove;
 
 public class StaffMoveController

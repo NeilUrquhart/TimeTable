@@ -1,10 +1,10 @@
 package controllers;
 
 import dao.TimetableData;
-import entities.Event;
-import entities.Student;
-import entities.StudentInEvent;
-import entities.TTSlot;
+import ontology.elements.Event;
+import ontology.elements.Student;
+import ontology.elements.StudentInEvent;
+import ontology.elements.TTSlot;
 import returnCodes.ResponseMove;
 import returnCodes.StudentMoveCode;
 
@@ -27,12 +27,16 @@ public class StudentMoveController
 		data = new TimetableData();
 	}
 	
-	public ResponseMove canStudentMoveToEvent(Student student, Event event)
+	public ResponseMove canStudentMoveToEvent(Student student, Event event, boolean swapEvent)
 	{
 		if(!canStudentMove(student, event))
 			return ResponseMove.NO_ROOM_AVAILABLE;
 		
-		if(event.getStudents().size() < event.getRoom().getCapacity())
+		int increaseCapacity = 0;
+		if (swapEvent)
+			increaseCapacity = 1;
+		
+		if(event.getStudents().size() < event.getRoom().getCapacity() + increaseCapacity)
 			return ResponseMove.OK;
 		
 		return ResponseMove.NO_ROOM_AVAILABLE;

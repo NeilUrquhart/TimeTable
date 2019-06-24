@@ -1,7 +1,7 @@
 package toStringHelpers;
 
-import entities.Student;
-import entities.StudentInEvent;
+import ontology.elements.Student;
+import ontology.elements.StudentInEvent;
 
 public class StudentToString implements ObjectToString
 {

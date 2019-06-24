@@ -9,9 +9,9 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Row;
 
-import entities.Room;
+import ontology.elements.Room;
 
-// Need to read the Room.CSV for the size of the roms 
+// Need to read the Room.CSV for the size of the rooms 
 // This will be done in here cause I said so.
 public class RoomParser
 {
