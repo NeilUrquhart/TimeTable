@@ -8,19 +8,10 @@ import returnCodes.ResponseMove;
 public class TimeTableMessage implements AgentAction {
 	ResponseMove response;
 	int caveatEvent;
-	int leaveEvent;
+	int caveatEvent2;
 	Object[] studentList;
 	Object[] targetEvents; 
 	AID targetStudent;
-
-	
-	public int getLeaveEvent() {
-		return leaveEvent;
-	}
-
-	public void setLeaveEvent(int leaveEvent) {
-		this.leaveEvent = leaveEvent;
-	}
 	
 	public AID getTargetStudent() {
 		return targetStudent;
@@ -54,6 +45,14 @@ public class TimeTableMessage implements AgentAction {
 		this.caveatEvent = caveatEvent;
 	}
 
+	public int getCaveatEvent2() {
+		return caveatEvent2;
+	}
+
+	public void setCaveatEvent2(int caveatEvent2) {
+		this.caveatEvent2 = caveatEvent2;
+	}
+	
 	public ResponseMove getResponse() {
 		return response;
 	}

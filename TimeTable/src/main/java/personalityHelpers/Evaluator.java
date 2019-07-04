@@ -68,13 +68,13 @@ public class Evaluator {
 	}
 	
 	public SlotInfo getUnacceptable(){
-		SlotInfo slot = unacceptable.remove(0);
+		SlotInfo slot = unacceptable.get(0);
 		slot.setUnacceptable(true);
 		return  slot;
 	}
 
 	public SlotInfo getAwkward() {
-		SlotInfo slot = awkward.remove(0);
+		SlotInfo slot = awkward.get(0);
 		slot.setUnacceptable(false);
 		return  slot;
 	}
@@ -94,22 +94,21 @@ public class Evaluator {
 	public void setAwkward(ArrayList<SlotInfo> awkward) {
 		this.awkward = awkward;
 	}
-
-	public void reAddSlot(SlotInfo currentSlot, boolean dontReAdd) {
-		if (dontReAdd) {
-			dontReAdd = false;
-		}
-		else if (currentSlot.isUnacceptable()) {
-			unacceptable.add(currentSlot);
-		} else {
-			awkward.add(currentSlot);
-		}		
-	}
 	
 	public ArrayList<SlotInfo> getFullList() {
 		ArrayList<SlotInfo> temp = unacceptable;
 		temp.addAll(awkward);
 		return temp;
+	}
+	
+	public void reAddSlot(SlotInfo currentSlot) {
+		// First remove the slot then re-add to the end of the list
+		removeSlotInfo(currentSlot);
+		if (currentSlot.isUnacceptable()) {
+			unacceptable.add(currentSlot);
+		} else {
+			awkward.add(currentSlot);
+		}		
 	}
 
 	public void removeSlotInfo(SlotInfo si) {

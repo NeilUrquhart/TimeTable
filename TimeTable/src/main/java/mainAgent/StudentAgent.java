@@ -72,7 +72,6 @@ public class StudentAgent extends Agent {
 	private List<Event> allEvents;
 	private boolean verbose = true;
 	private int inc = 0;
-	private boolean dontReAdd = false;
 
 	protected void setup() {
 
@@ -141,8 +140,7 @@ public class StudentAgent extends Agent {
 		public void action() {
 			if (!processingSlot && (evaluation.hasUnnacceptable() || evaluation.hasAwkard())) {
 				if (verbose) {
-					int sum = evaluation.getAwkwardList().size() + evaluation.getUnacceptableList().size(); 
-					System.out.println("Student " + studentInfo.getMatric() + " still has " + sum + " slot(s) to take care of.");
+					System.out.println("Student " + studentInfo.getMatric() + " still has " + evaluation.getFullList().size() + " slot(s) to take care of.");
 				}
 				// Grab a slot
 				if (evaluation.hasUnnacceptable()) {
@@ -208,6 +206,7 @@ public class StudentAgent extends Agent {
 						String status = (String) rs.getValue();
 						// Moved to new event, remove slot/event from personal list
 						if (status.equals("Success")) {
+							evaluation.removeSlotInfo(currentSlot);
 							processingSlot = false;
 							if (verbose)
 								System.out.println("Student " + studentInfo.getMatric() + " has succesfully dealt with the following slot " + currentSlot.getSlotID());
@@ -216,33 +215,26 @@ public class StudentAgent extends Agent {
 						else if  (status.equals("Success Swap")) {
 							processingSlot = false;
 							System.out.println(message.getTargetStudent());
-							if (message.getTargetStudent().getName().equals(getAID().getName())) {
-								// Check if the student has to add an awkward slot
-								Event caveatEvent = getEventByID(message.getCaveatEvent());
-								for (TTSlot slot : caveatEvent.getSlots())
-									if (studentInfo.getPersonality().getAwkwardSlots().contains(slot.getId())) {
-										evaluation.reAddSlot(new SlotInfo(slot.getId(), caveatEvent, false), dontReAdd);
-										if (verbose) {
-											System.out.println("Student " + studentInfo.getMatric() + " was moved to another awkward slot.");
-										}
+							// Check if the student has to add an awkward slot
+							Event caveatEvent = getEventByID(message.getCaveatEvent());
+							for (TTSlot slot : caveatEvent.getSlots())
+								if (studentInfo.getPersonality().getAwkwardSlots().contains(slot.getId())) {
+									evaluation.reAddSlot(new SlotInfo(slot.getId(), caveatEvent, false));
+									if (verbose) {
+										System.out.println("Student " + studentInfo.getMatric() + " was moved to another awkward slot.");
 									}
-
-								// Check if the student was moved away from an awkward/unacceptable slot
-								for (SlotInfo si : evaluation.getFullList()) {
-									if (si.getEvent().getId() == message.getLeaveEvent()) {
-										evaluation.removeSlotInfo(si);
-										if (verbose) {
-											System.out.println("Student " + studentInfo.getMatric() + " was moved to another awkward slot.");
-										}
-									}
+									break;
 								}
 
-								// Check if the student is currently evaluating the slot he has been moved from
-								if (currentSlot != null)
-									if (message.getCaveatEvent() == currentSlot.getEvent().getId())
-										dontReAdd = true;
+							// Check if the student was moved away from an awkward/unacceptable slot
+							for (SlotInfo si : evaluation.getFullList()) {
+								if (si.getEvent().getId() == message.getCaveatEvent2()) {
+									evaluation.removeSlotInfo(si);
+									if (verbose)
+										System.out.println("Student " + studentInfo.getMatric() + " left unacceptable/awkward slot " + si.getSlotID());
+									break;
+								}
 							}
-							return;
 						}
 						else if (status.equals("No Room")) {
 							// Grab the elements
@@ -278,8 +270,11 @@ public class StudentAgent extends Agent {
 
 							}
 						}
+						else if (status.equals("Not In Old Event")) {
+							processingSlot = false;
+						}
 						else {
-							evaluation.reAddSlot(currentSlot, dontReAdd);
+							evaluation.reAddSlot(currentSlot);
 							processingSlot = false;
 						}
 					}
@@ -355,10 +350,9 @@ public class StudentAgent extends Agent {
 									e.printStackTrace();
 								}
 								send(msg2);
-								if (verbose) {
-									int index = msg.getSender().getName().indexOf('@');								
+								if (verbose) {						
 									System.out.println("Student " + studentInfo.getMatric() +
-											" consented to event swap from Student " + msg.getSender().getName().substring(0, index));
+											" consented to event swap from Student " + msg.getSender().getLocalName());
 								}
 							}
 							else
@@ -435,7 +429,7 @@ public class StudentAgent extends Agent {
 							// If you have received all responses then message the timetabling for the swap
 							if (noOfResponses == noOfExpectedResponses) {
 								if (consentingStudentList.size() == 0) {
-									evaluation.reAddSlot(currentSlot, dontReAdd);
+									evaluation.reAddSlot(currentSlot);
 									processingSlot = false;
 									return;
 								}
@@ -447,7 +441,6 @@ public class StudentAgent extends Agent {
 											if (c1.getUtility() < c2.getUtility()) return 1;
 											return 0;
 										}});
-									System.out.println(consentingStudentList);
 									StudentToStudentRequest bestStudent = consentingStudentList.get(0);
 									for (StudentToStudentRequest nextStudent : consentingStudentList) {
 										if (nextStudent.getUtility() > bestStudent.getUtility())

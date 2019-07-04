@@ -167,8 +167,8 @@ public class FacadeController
 	{
 		StudentMoveCode result = StudentMoveCode.NO_MOVE;
 		studentMove.setTimetableData(data);
-		ResponseMove resultOne = studentMove.canStudentMoveToEvent(studentOne, eventTwo, true);
-		ResponseMove resultTwo = studentMove.canStudentMoveToEvent(studentTwo, eventOne, true);
+		ResponseMove resultOne = studentMove.canStudentMoveToEvent(studentOne, eventTwo, eventOne, true);
+		ResponseMove resultTwo = studentMove.canStudentMoveToEvent(studentTwo, eventOne, eventTwo, true);
 		if(resultOne == ResponseMove.OK && resultTwo == ResponseMove.OK)
 		{
 			result = studentMove.swapStudents(studentOne, eventOne, studentTwo, eventTwo);
@@ -189,21 +189,8 @@ public class FacadeController
 	public ResponseMove moveStudentToNewEvent(Student student, Event event, Event oldEvent)
 	{
 
-		// Check if student is in old Event
-		boolean hasOldEvent = false;
-		for (StudentInEvent e : student.getEvents()) {
-			if (e.getEvent().getId() == oldEvent.getId()) {
-				hasOldEvent = true;
-				break;
-			}
-		}
-		if (!hasOldEvent) {
-			return ResponseMove.NOT_IN_OLD_EVENT;
-		}
-
-
 		createNewStudentMoveController();
-		ResponseMove canStudentMove = studentMove.canStudentMoveToEvent(student, event, false);
+		ResponseMove canStudentMove = studentMove.canStudentMoveToEvent(student, event, oldEvent, false);
 		if(canStudentMove != ResponseMove.OK)
 		{
 			return canStudentMove;
@@ -219,9 +206,13 @@ public class FacadeController
 	public ResponseMove swapStudentsBetweenEvents(Student studentOne, Event eventOne, Student studentTwo, Event eventTwo)
 	{
 		createNewStudentMoveController();
-		ResponseMove studentOneResult = studentMove.canStudentMoveToEvent(studentOne, eventTwo, true);
-		ResponseMove studentTwoResult = studentMove.canStudentMoveToEvent(studentTwo, eventOne, true);
-		if(studentOneResult != ResponseMove.OK && studentTwoResult != ResponseMove.OK)
+		ResponseMove studentOneResult = studentMove.canStudentMoveToEvent(studentOne, eventTwo, eventOne, true);
+		ResponseMove studentTwoResult = studentMove.canStudentMoveToEvent(studentTwo, eventOne, eventTwo, true);
+		
+		if(studentOneResult == ResponseMove.NOT_IN_OLD_EVENT || studentTwoResult == ResponseMove.NOT_IN_OLD_EVENT) {
+			return ResponseMove.NOT_IN_OLD_EVENT;
+		}
+		else if(studentOneResult != ResponseMove.OK && studentTwoResult != ResponseMove.OK)
 		{
 			return ResponseMove.NO_ROOM_AVAILABLE;
 		}
@@ -268,11 +259,11 @@ public class FacadeController
 				for (StudentInEvent sie : studentEvents) {
 					if (sie.getEvent().getId() == e.getId())
 						addEvent = false;
-						
+
 				}
 				if (addEvent)
 					compatibleEvents.add(e);
-				
+
 			}
 		}
 		return compatibleEvents;

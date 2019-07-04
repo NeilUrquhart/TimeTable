@@ -27,8 +27,23 @@ public class StudentMoveController
 		data = new TimetableData();
 	}
 	
-	public ResponseMove canStudentMoveToEvent(Student student, Event event, boolean swapEvent)
+	public ResponseMove canStudentMoveToEvent(Student student, Event event, Event oldEvent, boolean swapEvent)
 	{
+		// First check if the student is in the old event. This has to be checked as sometimes the students
+		// can be moved before their request is processed.
+		// Check if student is in old Event
+		boolean hasOldEvent = false;
+		for (StudentInEvent e : student.getEvents()) {
+			if (e.getEvent().getId() == oldEvent.getId()) {
+				hasOldEvent = true;
+				break;
+			}
+		}
+		if (!hasOldEvent) {
+			return ResponseMove.NOT_IN_OLD_EVENT;
+		}
+		
+		
 		if(!canStudentMove(student, event))
 			return ResponseMove.NO_ROOM_AVAILABLE;
 		

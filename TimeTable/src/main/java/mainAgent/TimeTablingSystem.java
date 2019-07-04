@@ -116,13 +116,22 @@ public class TimeTablingSystem extends Agent {
 									, facade.getEventById(request.getLeaveEvent()), facade.getStudentByMatric(request.getTargetStudentMatric())
 									, facade.getEventById(request.getTargetEvent()));
 							if (result == ResponseMove.OK) {
-								
-								sendResponse(result, "Success Swap", msg, request.getLeaveEvent(), null, null, studentList.get(request.getTargetStudentMatric()), 
-										request.getLeaveEvent());
+								// The target event is matched with the leaving student because of the event swap
+								sendResponse(result, "Success Swap", msg, request.getLeaveEvent(), request.getTargetEvent(), null, null, studentList.get(request.getTargetStudentMatric()));
+								// Also update the other student about the swap
+								sendResponse(result, "Success Swap", msg, request.getTargetEvent(), request.getLeaveEvent(), null, null, studentList.get(request.getLeaveStudentMatric()));
 								if (verbose) {
 									System.out.println("Timetable successfully swapped student " + 
 											msg.getSender().getLocalName() + 
 											" with student " + request.getTargetStudentMatric());
+								}
+							}
+							else if (result == ResponseMove.NOT_IN_OLD_EVENT) {
+								sendResponse(result, "Not In Old Event", msg, null, null, null, null, null);
+								if (verbose) {
+									System.out.println("Timetable unsuccessfully swapped student " + 
+											msg.getSender().getLocalName() + 
+											" with student " + request.getTargetStudentMatric() + " because of " + result);
 								}
 							}
 							else {
@@ -180,7 +189,14 @@ public class TimeTablingSystem extends Agent {
 										}
 									}
 									// Send Reply
-									sendResponse(result, "No Room", msg, null, listOfStudentsToContact, listOfEvents, null, null);
+									if (verbose)
+										System.out.println("Could not move student " + msg.getSender().getLocalName() +
+												" sending list of potential students to contact.");
+									sendResponse(result, "No Room", msg, null, null, listOfStudentsToContact, listOfEvents, null);
+									return;
+								}
+								else if (result == ResponseMove.NOT_IN_OLD_EVENT) {
+									sendResponse(result, "Not In Old Event", msg, null, null, null, null, null);
 									return;
 								}
 								else {
@@ -191,7 +207,7 @@ public class TimeTablingSystem extends Agent {
 								}
 							}
 							// If the student is leaving an unacceptable event and the only option left is awkward do the transfer
-							// This is a very rare case of it happening so there will be a binary decision of move only if there is space
+							// This is a very rare case of it happening so there will be a binary decision of moving only if there is space
 							else if (request.getPersonality().getAwkwardSlots().contains(request.getSlot()) 
 									&& compatibleEventsPrunedFull.isEmpty() && !compatibleEventsPrunedUnacceptable.isEmpty()) {
 								for (Event e : compatibleEventsPrunedUnacceptable) {
@@ -249,13 +265,17 @@ public class TimeTablingSystem extends Agent {
 		
 	}
 	
-	private void sendResponse(ResponseMove result, String value, ACLMessage msg, Integer caveatEvent, ArrayList<AID> students, ArrayList<Integer> events, AID targetStudent, Integer leaveEvent) {
+	private void sendResponse(ResponseMove result, String value, ACLMessage msg, Integer caveatEvent, Integer caveatEvent2, ArrayList<AID> students, ArrayList<Integer> events, AID targetStudent) {
 		// Create response
 		TimeTableMessage ttm = new TimeTableMessage();
 		ttm.setResponse(result);
 		// Only if the student has to move to an event that is awkward for him
 		if (caveatEvent != null) {
 			ttm.setCaveatEvent(caveatEvent);
+		}
+		
+		if (caveatEvent2 != null) {
+			ttm.setCaveatEvent2(caveatEvent2);
 		}
 		// Only if there are no rooms available
 		if (students != null && events != null) {
@@ -268,9 +288,7 @@ public class TimeTablingSystem extends Agent {
 			ttm.setTargetStudent(targetStudent);
 			msg2.addReceiver(targetStudent);
 		}
-		if (leaveEvent != null) {
-			ttm.setLeaveEvent(leaveEvent);
-		}
+		
 		msg2.setPerformative(ACLMessage.INFORM);
 		Result rs = new Result();
 		rs.setAction(ttm);
