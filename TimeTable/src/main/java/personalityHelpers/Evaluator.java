@@ -69,12 +69,16 @@ public class Evaluator {
 	
 	public SlotInfo getUnacceptable(){
 		SlotInfo slot = unacceptable.get(0);
+		slot.setHasBeenChecked(true);
+		unacceptable.set(0, slot);
 		slot.setUnacceptable(true);
 		return  slot;
 	}
 
 	public SlotInfo getAwkward() {
 		SlotInfo slot = awkward.get(0);
+		slot.setHasBeenChecked(true);
+		unacceptable.set(0, slot);
 		slot.setUnacceptable(false);
 		return  slot;
 	}

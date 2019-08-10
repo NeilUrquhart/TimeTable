@@ -71,7 +71,6 @@ public class StudentAgent extends Agent {
 	private ArrayList<StudentToStudentRequest> consentingStudentList;
 	private List<Event> allEvents;
 	private boolean verbose = true;
-	private int inc = 0;
 
 	protected void setup() {
 
@@ -108,6 +107,7 @@ public class StudentAgent extends Agent {
 		this.addBehaviour(new ReceiveResponse(this));
 		this.addBehaviour(new ReceiveRequest(this));
 		this.addBehaviour(new ReceiveConsent(this));
+		this.addBehaviour(new ReceiveTermination(this));
 	}
 
 	private class FindTimeTable extends OneShotBehaviour {
@@ -139,6 +139,13 @@ public class StudentAgent extends Agent {
 		}		
 		public void action() {
 			if (!processingSlot && (evaluation.hasUnnacceptable() || evaluation.hasAwkard())) {
+				// Check if all the slots on the list have been checked and if so inform the timetabling system
+				try {
+					checkSlotsChecked();
+				} catch (CodecException | OntologyException e) {
+					e.printStackTrace();
+				}
+				
 				if (verbose) {
 					System.out.println("Student " + studentInfo.getMatric() + " still has " + evaluation.getFullList().size() + " slot(s) to take care of.");
 				}
@@ -210,6 +217,7 @@ public class StudentAgent extends Agent {
 							processingSlot = false;
 							if (verbose)
 								System.out.println("Student " + studentInfo.getMatric() + " has succesfully dealt with the following slot " + currentSlot.getSlotID());
+							checkSlotsChecked();
 							return;
 						}
 						else if  (status.equals("Success Swap")) {
@@ -232,6 +240,7 @@ public class StudentAgent extends Agent {
 									evaluation.removeSlotInfo(si);
 									if (verbose)
 										System.out.println("Student " + studentInfo.getMatric() + " left unacceptable/awkward slot " + si.getSlotID());
+									checkSlotsChecked();
 									break;
 								}
 							}
@@ -489,6 +498,31 @@ public class StudentAgent extends Agent {
 		}
 	}
 
+	private class ReceiveTermination extends Behaviour {
+
+		public ReceiveTermination(Agent a) {
+			super(a);
+		}
+
+		@Override
+		public void action() {
+			MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CANCEL);
+			ACLMessage msg = receive(mt);
+			if(msg != null){
+				myAgent.doDelete();
+			}			
+		}
+
+		@Override
+		public boolean done() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+	}
+
+	
 	private Event getEventByID(int id) {
 		for (Event e : allEvents) {
 			if (e.getId() == id)
@@ -536,5 +570,29 @@ public class StudentAgent extends Agent {
 		}
 
 		return utility;
+	}
+	
+	private void  checkSlotsChecked() throws CodecException, OntologyException {
+		boolean allChecked = true;
+		for (SlotInfo si : evaluation.getFullList())
+			allChecked = si.isChecked();
+		
+		if (allChecked) {
+			// Message the Timetabling agent that you are done. It is set to request to differentiate this message
+			if (verbose) {
+				System.out.println("Student " + getLocalName() + " is done.");
+			}
+			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+			msg.setLanguage(codec.getName());
+			msg.setOntology(ontology.getName()); 
+    		msg.addReceiver(timeTableAID);
+    		Action request = new Action();
+    		// The action here is completely unnecessary but I can't get the timetabling system to read the
+    		// message sender without implementing some sort of action
+			request.setAction(new StudentToTimetableRequestSwap());
+			request.setActor(timeTableAID);
+			getContentManager().fillContent(msg, request);
+			send(msg);
+		}
 	}
 }

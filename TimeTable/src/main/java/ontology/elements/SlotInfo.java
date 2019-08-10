@@ -4,6 +4,7 @@ public class SlotInfo {
 	private Integer slotID;
 	private Event event;
 	private boolean unacceptable;
+	private boolean checked = false; 
 	
 	public SlotInfo() { }
 	
@@ -30,6 +31,14 @@ public class SlotInfo {
 	}
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setHasBeenChecked(boolean checked) {
+		this.checked = checked;
 	}
 	
 }

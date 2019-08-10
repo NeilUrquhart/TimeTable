@@ -16,6 +16,7 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -40,6 +41,7 @@ public class TimeTablingSystem extends Agent {
 	private FacadeController facade;
 	private HashMap<String, AID> studentList = new HashMap<String, AID>();
 	private boolean verbose = true;
+	private HashMap<String, Boolean> activeStudents = new HashMap<String, Boolean>();
 
 	protected void setup() {
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -63,9 +65,11 @@ public class TimeTablingSystem extends Agent {
 		doWait(500);
 		this.addBehaviour(new FindStudents(this));
 		this.addBehaviour(new ReceiveRequests(this));
+		this.addBehaviour(new checkWhoFinished(this, 5000));
+		this.addBehaviour(new ReceiveDone(this));
 	}
-	
-	
+
+
 	private class FindStudents extends OneShotBehaviour {
 
 		public FindStudents(Agent a) {
@@ -107,6 +111,9 @@ public class TimeTablingSystem extends Agent {
 					// Let JADE convert from String to Java objects
 					// Output will be a ContentElement
 					ce = getContentManager().extractContent(msg);
+					// Check if the student is in the active student list and if need be add them
+					if (!activeStudents.keySet().contains(msg.getSender().getLocalName()))
+						activeStudents.put(msg.getSender().getLocalName(), false);
 					if (ce instanceof Action) {
 						Action ac = (Action) ce;
 						//This is the request after the consent for a swap has happened
@@ -157,7 +164,7 @@ public class TimeTablingSystem extends Agent {
 							 * Check what events are available compatible with the preferences of the student
 							 * Execute the correct response depending on the pruning on the Event list
 							 */
-							
+
 							// If the fully pruned list has options check if the Event switch is possible
 							ResponseMove result = null;
 							if (!compatibleEventsPrunedFull.isEmpty()) {
@@ -221,9 +228,9 @@ public class TimeTablingSystem extends Agent {
 										sendResponse(result, "Failed", msg, null, null, null, null, null);
 										return;
 									}
-	
+
 								}
-								
+
 							}
 							// Otherwise just say that there is no option to switch
 							else {
@@ -255,16 +262,91 @@ public class TimeTablingSystem extends Agent {
 		}
 
 	}
-	
+
+	private class checkWhoFinished extends TickerBehaviour {
+		public checkWhoFinished(Agent a, long period) {
+			super(a, period);
+		}
+
+		@Override
+		protected void onTick() {
+			// Check if everyone is done
+			boolean isDone = true;
+			for (String name : activeStudents.keySet()) {
+				isDone = activeStudents.get(name);
+			}
+
+			if (isDone) {
+				for (Student student : facade.getAllStudents()) {
+					System.out.println("Student: " + student.getMatric());
+					System.out.println("Is in the following events: ");
+					for (StudentInEvent e : student.getEvents()) {
+						System.out.print("        ");
+						System.out.println(e.getEvent().getId());
+					}
+					System.out.println();
+				}
+				
+				// Shut off all agents
+				ACLMessage msg = new ACLMessage(ACLMessage.CANCEL);
+				msg.setLanguage(codec.getName());
+				msg.setOntology(ontology.getName()); 
+				for (String s : studentList.keySet()) {
+					msg.addReceiver(studentList.get(s));
+				}
+	    		Action request = new Action();
+	    		// The action here is completely unnecessary but I can't get the timetabling system to read the
+	    		// message sender without implementing some sort of action
+				request.setAction(new StudentToTimetableRequestSwap());
+				request.setActor(myAgent.getAID());
+				try {
+					getContentManager().fillContent(msg, request);
+				} catch (CodecException e) {
+					e.printStackTrace();
+				} catch (OntologyException e) {
+					e.printStackTrace();
+				}
+				send(msg);
+				// Now shut self off
+				myAgent.doDelete();
+			}
+		}
+
+	}
+
+	private class ReceiveDone extends Behaviour {
+
+		public ReceiveDone(Agent a) {
+			super(a);
+		}
+
+		@Override
+		public void action() {
+			MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+			ACLMessage msg = receive(mt);
+			if(msg != null){
+				activeStudents.put(msg.getSender().getLocalName(), true);
+			}			
+		}
+
+		@Override
+		public boolean done() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+	}
+
 	private ArrayList<Event> pruneEvent(ArrayList<Event> toBePruned, ArrayList<Integer> slots) {
-		
+
 		for (int slt : slots) {
 			facade.pruneEvents(toBePruned, slt);
 		}
 		return toBePruned;
-		
+
 	}
-	
+
 	private void sendResponse(ResponseMove result, String value, ACLMessage msg, Integer caveatEvent, Integer caveatEvent2, ArrayList<AID> students, ArrayList<Integer> events, AID targetStudent) {
 		// Create response
 		TimeTableMessage ttm = new TimeTableMessage();
@@ -273,7 +355,7 @@ public class TimeTablingSystem extends Agent {
 		if (caveatEvent != null) {
 			ttm.setCaveatEvent(caveatEvent);
 		}
-		
+
 		if (caveatEvent2 != null) {
 			ttm.setCaveatEvent2(caveatEvent2);
 		}
@@ -288,7 +370,7 @@ public class TimeTablingSystem extends Agent {
 			ttm.setTargetStudent(targetStudent);
 			msg2.addReceiver(targetStudent);
 		}
-		
+
 		msg2.setPerformative(ACLMessage.INFORM);
 		Result rs = new Result();
 		rs.setAction(ttm);
