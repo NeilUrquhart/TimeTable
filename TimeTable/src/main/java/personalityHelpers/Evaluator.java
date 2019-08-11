@@ -70,7 +70,7 @@ public class Evaluator {
 	public SlotInfo getUnacceptable(){
 		SlotInfo slot = unacceptable.get(0);
 		slot.setHasBeenChecked(true);
-		unacceptable.set(0, slot);
+		unacceptable.remove(0);
 		slot.setUnacceptable(true);
 		return  slot;
 	}
@@ -78,7 +78,7 @@ public class Evaluator {
 	public SlotInfo getAwkward() {
 		SlotInfo slot = awkward.get(0);
 		slot.setHasBeenChecked(true);
-		unacceptable.set(0, slot);
+		unacceptable.remove(0);
 		slot.setUnacceptable(false);
 		return  slot;
 	}

@@ -278,7 +278,7 @@ public class TimeTablingSystem extends Agent {
 
 			if (isDone) {
 				for (Student student : facade.getAllStudents()) {
-					System.out.println("Student: " + student.getMatric());
+					System.out.println("Student with Matriculation: " + student.getMatric());
 					System.out.println("Is in the following events: ");
 					for (StudentInEvent e : student.getEvents()) {
 						System.out.print("        ");
